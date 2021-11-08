@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.itemContainer {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 50px;
+}
