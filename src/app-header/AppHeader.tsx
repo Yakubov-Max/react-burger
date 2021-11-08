@@ -13,14 +13,14 @@ function AppHeader() {
             <p className={`text text_type_main-default text_color_primary pl-2 ${headerStyles.itemText}`}>Конструктор</p>
           </a>
           <a className={` pt-4 pb-4 pl-5 pr-5 ml-2 ${headerStyles.itemContainer}`} href="#">
-            <ProfileIcon type="primary" />
-            <p className={`text text_type_main-default text_color_primary pl-2 `}>Лента заказов</p>
+            <ListIcon type="secondary" />
+            <p className={`text text_type_main-default text_color_inactive pl-2 `}>Лента заказов</p>
           </a>
         </div>
         <Logo />
         <a className={`pt-4 pb-4 pl-5 pr-5 ml-2 ${headerStyles.itemContainer}`} href="#">
-          <ListIcon type="primary" />
-          <p className={`text text_type_main-default text_color_primary pl-2 ${headerStyles.itemText}`}>Лента заказов</p>
+          <ProfileIcon type="secondary" />
+          <p className={`text text_type_main-default text_color_inactive pl-2 ${headerStyles.itemText}`}>Лента заказов</p>
         </a>
       </nav>
     </header>
