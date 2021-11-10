@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <AppHeader></AppHeader>
       <main style={{display: 'flex', justifyContent: 'center'}}>
-        <BurgerIngridients />
+        <BurgerIngridients data={data} />
         <BurgerConstructor data={data}/>
       </main>
     </div>
