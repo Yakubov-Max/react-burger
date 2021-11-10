@@ -1,12 +1,14 @@
 import React from "react";
 import ingridientsStyles from "./BurgerIngridients.module.css"
 import { CurrencyIcon, Tab, Counter } from "@ya.praktikum/react-developer-burger-ui-components"
+import PropTypes from 'prop-types'
 
 
 function BurgerIngridients(props) {
   const main = props.data.filter((ingredient) => ingredient.type === 'main');
   const buns = props.data.filter((ingredient) => ingredient.type === 'bun');
   const sauces = props.data.filter((ingredient) => ingredient.type === 'sauce');
+  console.log(buns)
   const [current, setCurrent] = React.useState('buns')
 
   return (
@@ -53,16 +55,16 @@ function BurgerIngridients(props) {
   )
 }
 
-const IngridientItem = (item) => {
+const IngridientItem = ({ ingridient }) => {
   return (
     <div className={ingridientsStyles.itemContainer}>
       <Counter count={1} size="default" />
-      <img src={item.image} alt={item.name} />
+      <img src={ingridient.image} alt={ingridient.name} />
       <div className='pt-1 pb-1' style={{ display: "flex" }}>
-        <span className="text text_type_digits-default" style={{textAlign:"center"}}>{item.price}</span>
+        <span className="text text_type_digits-default" style={{textAlign:"center"}}>{ingridient.price}</span>
         <CurrencyIcon type={"primary"} />
       </div>
-      <p className="text text_type_main-default text_color_primary">{item.name}</p>
+      <p className="text text_type_main-default text_color_primary">{ingridient.name}</p>
     </div>
   )
 }
