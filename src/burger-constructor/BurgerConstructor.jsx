@@ -5,6 +5,8 @@ import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-de
 
 
 function BurgerConstructor(props) {
+  const mainIngridients = props.data.filter((item) => item.type !== "bun")
+
   return (
     <section className={`pt-25  ${constructorStyles.container}`}>
       <ConstructorElement
@@ -17,7 +19,7 @@ function BurgerConstructor(props) {
         price={props.data[0].price} />
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
-        {props.data.map((item) => (
+        {mainIngridients.map((item) => (
           <li key={item._id} className={'ml-8'}>
             <ConstructorElement
               type={undefined}
@@ -39,9 +41,9 @@ function BurgerConstructor(props) {
         thumbnail={props.data[0].image}
         price={props.data[0].price} />
 
-      <div className="pt-10" style={{ display: "flex", alignItems: "center", alignSelf: 'flex-end' }}>
-        <div className="pr-10" style={{ display: "flex", alignItems: "center" }}>
-          <p className="text text_type_digits-medium text_color_primary" style={{ paddingRight: 10 }}>610</p>
+      <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.flexEnd}`}>
+        <div className={`pr-10 ${constructorStyles.flexContainer}`}>
+          <p className="pr-2 text text_type_digits-medium text_color_primary">610</p>
           <CurrencyIcon className="pr-10" />
         </div>
         <Button type="primary" size="medium">
@@ -53,7 +55,7 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default BurgerConstructor;

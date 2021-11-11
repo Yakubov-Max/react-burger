@@ -1,15 +1,15 @@
 import React from 'react';
-import './App.css';
 import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingridients/BurgerIngridients';
 import data from "../utils/data.json"
+import appStyles from './App.module.css'
 
 function App() {
   return (
     <div className="App">
       <AppHeader></AppHeader>
-      <main style={{display: 'flex', justifyContent: 'center'}}>
+      <main className={appStyles.container}>
         <BurgerIngridients data={data} />
         <BurgerConstructor data={data}/>
       </main>

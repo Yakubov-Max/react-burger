@@ -15,3 +15,16 @@
   list-style-image: url('../images/constructor-vector.svg');
   gap: 16px;
 }
+
+.flex {
+  display: flex;
+}
+
+.flexContainer {
+  display: flex;
+  align-items: center;
+}
+
+.flexEnd {
+  align-self: flex-end;
+}

@@ -13,8 +13,8 @@ function BurgerIngridients(props) {
 
   return (
     <section className={`pt-10 pr-10 ${ingridientsStyles.container}`}>
-      <h2 style={{ alignSelf: "flex-start" }} className={`pb-5 text text_type_main-large`}>Соберите бургер</h2>
-      <div style={{ display: 'flex' }}>
+      <h2 className={`pb-5 text text_type_main-large flex-start`}>Соберите бургер</h2>
+      <div className={ingridientsStyles.flex}>
         <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
           Булки
         </Tab>
@@ -60,8 +60,8 @@ const IngridientItem = ({ ingridient }) => {
     <div className={ingridientsStyles.itemContainer}>
       <Counter count={1} size="default" />
       <img src={ingridient.image} alt={ingridient.name} />
-      <div className='pt-1 pb-1' style={{ display: "flex" }}>
-        <span className="text text_type_digits-default" style={{textAlign:"center"}}>{ingridient.price}</span>
+      <div className='pt-1 pb-1 flex'>
+        <span className="text text_type_digits-default flex">{ingridient.price}</span>
         <CurrencyIcon type={"primary"} />
       </div>
       <p className="text text_type_main-default text_color_primary">{ingridient.name}</p>
@@ -77,11 +77,11 @@ const ingridientShape = PropTypes.shape({
 })
 
 IngridientItem.propTypes = {
-  ingridient: ingridientShape,
+  ingridient: ingridientShape.isRequired,
 }
 
 BurgerIngridients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default BurgerIngridients
