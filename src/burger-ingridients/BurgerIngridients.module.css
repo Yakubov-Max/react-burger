@@ -1,0 +1,22 @@
+.container {
+  max-width: 600px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+  row-gap: 32px;
+}
+
+.itemContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.typeContainer {
+  overflow-y: auto;
+  max-height: 758px;
+}
