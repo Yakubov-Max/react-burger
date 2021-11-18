@@ -1,11 +1,22 @@
-import React from "react"
+import React, { useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
 import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
+import OrderDetails from '../order-details/OrderDetails';
 
 
-function BurgerConstructor(props) {
+const BurgerConstructor = (props) => {
   const mainIngridients = props.data.filter((item) => item.type !== "bun")
+
+  const [modalOpen, setModal] = useState(false)
+
+  const handleClose = () => {
+    setModal(false)
+  }
+
+  const handleOpen = () => {
+    setModal(true)
+  }
 
   return (
     <section className={`pt-25  ${constructorStyles.container}`}>
@@ -46,10 +57,13 @@ function BurgerConstructor(props) {
           <p className="pr-2 text text_type_digits-medium text_color_primary">610</p>
           <CurrencyIcon className="pr-10" />
         </div>
-        <Button type="primary" size="medium">
+        <Button type="primary" onClick={handleOpen} size="medium">
           Оформить заказ
         </Button>
       </div>
+      {modalOpen &&
+        <OrderDetails handleClose={handleClose}></OrderDetails>
+      }
     </section>
   )
 }

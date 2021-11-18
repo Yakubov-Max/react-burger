@@ -6,7 +6,7 @@ import Ingridient from "../ingridient/Ingridient";
 
 
 
-function BurgerIngridients(props) {
+const BurgerIngridients = (props) => {
   const main = props.data.filter((ingredient) => ingredient.type === 'main');
   const buns = props.data.filter((ingredient) => ingredient.type === 'bun');
   const sauces = props.data.filter((ingredient) => ingredient.type === 'sauce');
