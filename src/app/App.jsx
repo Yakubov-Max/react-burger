@@ -3,25 +3,24 @@ import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingridients/BurgerIngridients';
 import appStyles from './App.module.css'
+import INGREDIENTS_URL from '../utils/constants'
 
 function App() {
   const [data, setData] = useState(null);
 
-  const url = 'https://norma.nomoreparties.space/api/ingredients'
+  useEffect(() => {
+    downloadData().then((data) => setData(data))
+  }, [])
 
   const downloadData = async () => {
     try {
-      const res = await fetch(url)
+      const res = await fetch(INGREDIENTS_URL)
       const dataObj = await res.json()
       return dataObj.data
     } catch (err) {
       console.log(err)
     }
   }
-
-  useEffect(() => {
-    downloadData().then((data) => setData(data))
-  }, [])
 
   return (
     <div className="App">
