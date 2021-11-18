@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import ingridientsStyles from "./BurgerIngridients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import PropTypes from 'prop-types'
@@ -10,7 +10,22 @@ const BurgerIngridients = (props) => {
   const main = props.data.filter((ingredient) => ingredient.type === 'main');
   const buns = props.data.filter((ingredient) => ingredient.type === 'bun');
   const sauces = props.data.filter((ingredient) => ingredient.type === 'sauce');
-  const [current, setCurrent] = React.useState('buns')
+  const [current, setCurrent] = React.useState(null)
+
+  const bunTab = useRef();
+  const sauceTab = useRef();
+  const mainTab = useRef();
+
+  useEffect(() => {
+    if (current === "buns" && current !== null) {
+      bunTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "sauces") {
+      sauceTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "main") {
+      mainTab.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [current])
+
 
   return (
     <section className={`pt-10 pr-10 ${ingridientsStyles.container}`}>
@@ -27,7 +42,7 @@ const BurgerIngridients = (props) => {
         </Tab>
       </div>
       <div className={`mt-10 pr-1 custom-scroll ${ingridientsStyles.typeContainer}`}>
-        <div className={` ${ingridientsStyles.typeSection}`}>
+        <div ref={bunTab} className={` ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Булки</h3>
           <div className={ingridientsStyles.grid}>
             {buns.map((item, index) => (
@@ -35,7 +50,7 @@ const BurgerIngridients = (props) => {
             ))}
           </div>
         </div>
-        <div className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={sauceTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Соусы</h3>
           <div className={ingridientsStyles.grid}>
             {sauces.map((item, index) => (
@@ -43,7 +58,7 @@ const BurgerIngridients = (props) => {
             ))}
           </div>
         </div>
-        <div className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={mainTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Начинки</h3>
           <div className={ingridientsStyles.grid}>
             {main.map((item, index) => (
