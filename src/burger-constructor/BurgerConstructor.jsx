@@ -5,8 +5,8 @@ import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-de
 import OrderDetails from '../order-details/OrderDetails';
 
 
-const BurgerConstructor = (props) => {
-  const mainIngridients = props.data.filter((item) => item.type !== "bun")
+const BurgerConstructor = ({ ingridients }) => {
+  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
   const [modalOpen, setModal] = useState(false)
 
@@ -25,9 +25,9 @@ const BurgerConstructor = (props) => {
         type={'top'}
         isLocked={true}
         handleClose={undefined}
-        text={`${props.data[0].name} (верх)`}
-        thumbnail={props.data[0].image}
-        price={props.data[0].price} />
+        text={`${ingridients[0].name} (верх)`}
+        thumbnail={ingridients[0].image}
+        price={ingridients[0].price} />
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {mainIngridients.map((item) => (
@@ -48,9 +48,9 @@ const BurgerConstructor = (props) => {
         type={'bottom'}
         isLocked={true}
         handleClose={undefined}
-        text={`${props.data[0].name} (низ)`}
-        thumbnail={props.data[0].image}
-        price={props.data[0].price} />
+        text={`${ingridients[0].name} (низ)`}
+        thumbnail={ingridients[0].image}
+        price={ingridients[0].price} />
 
       <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.flexEnd}`}>
         <div className={`pr-10 ${constructorStyles.flexContainer}`}>

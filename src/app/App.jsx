@@ -3,10 +3,10 @@ import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingridients/BurgerIngridients';
 import appStyles from './App.module.css'
-import INGREDIENTS_URL from '../utils/constants'
+import { INGREDIENTS_URL } from '../utils/constants'
 
 function App() {
-  const [data, setData] = useState(null);
+  const [ingridients, setData] = useState(null);
 
   useEffect(() => {
     downloadData().then((data) => setData(data))
@@ -27,10 +27,10 @@ function App() {
       <AppHeader></AppHeader>
       <main className={appStyles.container}>
         {
-          data && (
+          ingridients && (
             <>
-              <BurgerIngridients data={data} />
-              <BurgerConstructor data={data} />
+              <BurgerIngridients ingridients={ingridients} />
+              <BurgerConstructor ingridients={ingridients} />
             </>
           )
         }
