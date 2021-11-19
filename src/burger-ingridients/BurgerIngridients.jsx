@@ -25,6 +25,8 @@ const BurgerIngridients = ({ ingridients }) => {
     }
   }, [current])
 
+  console.log(ingridients[0])
+
   const main = ingridients.filter((ingredient) => ingredient.type === 'main');
   const buns = ingridients.filter((ingredient) => ingredient.type === 'bun');
   const sauces = ingridients.filter((ingredient) => ingredient.type === 'sauce');
@@ -74,7 +76,7 @@ const BurgerIngridients = ({ ingridients }) => {
 }
 
 BurgerIngridients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(ingridientShape)).isRequired
+  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerIngridients

@@ -10,6 +10,7 @@ function App() {
 
   useEffect(() => {
     downloadData().then((data) => setData(data))
+    
   }, [])
 
   const downloadData = async () => {

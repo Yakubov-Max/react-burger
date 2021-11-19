@@ -70,7 +70,7 @@ const BurgerConstructor = ({ ingridients }) => {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(ingridientShape)).isRequired
+  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerConstructor;
