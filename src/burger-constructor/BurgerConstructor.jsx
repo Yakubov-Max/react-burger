@@ -3,12 +3,13 @@ import constructorStyles from "./BurgerConstructor.module.css"
 import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
+import { ingridientShape } from "../utils/proptypes";
 
 
 const BurgerConstructor = ({ ingridients }) => {
-  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
-
   const [modalOpen, setModal] = useState(false)
+  
+  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
   const handleClose = () => {
     setModal(false)
@@ -33,7 +34,7 @@ const BurgerConstructor = ({ ingridients }) => {
         {mainIngridients.map((item) => (
           <li key={item._id} className={'ml-8'}>
             <ConstructorElement
-              type={undefined}
+              type={null}
               isLocked={false}
               handleClose={undefined}
               text={item.name}
@@ -52,7 +53,7 @@ const BurgerConstructor = ({ ingridients }) => {
         thumbnail={ingridients[0].image}
         price={ingridients[0].price} />
 
-      <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.flexEnd}`}>
+      <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.checkoutContainer}`}>
         <div className={`pr-10 ${constructorStyles.flexContainer}`}>
           <p className="pr-2 text text_type_digits-medium text_color_primary">610</p>
           <CurrencyIcon className="pr-10" />
@@ -69,7 +70,7 @@ const BurgerConstructor = ({ ingridients }) => {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired
+  data: PropTypes.arrayOf(PropTypes.shape(ingridientShape)).isRequired
 }
 
 export default BurgerConstructor;

@@ -4,6 +4,7 @@ import ingridientStyles from './ingridient.module.css'
 import PropTypes from "prop-types"
 import IngridientDeatils from "../ingridient-details/IngridientDetails"
 import { useState } from "react"
+import { ingridientShape } from "../utils/proptypes"
 
 const Ingridient = ({ ingridient }) => {
   const [modalOpen, setModal] = useState(false)
@@ -33,13 +34,6 @@ const Ingridient = ({ ingridient }) => {
     </>
   )
 }
-
-const ingridientShape = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
-})
 
 
 Ingridient.propTypes = {

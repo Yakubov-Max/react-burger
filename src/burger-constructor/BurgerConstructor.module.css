@@ -16,15 +16,11 @@
   gap: 16px;
 }
 
-.flex {
-  display: flex;
-}
-
 .flexContainer {
   display: flex;
   align-items: center;
 }
 
-.flexEnd {
+.checkoutContainer {
   align-self: flex-end;
 }

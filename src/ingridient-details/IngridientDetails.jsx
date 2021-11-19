@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "../modal/Modal";
 import ingridientStyles from "./IngridientDetails.module.css"
 import PropTypes from "prop-types"
+import { ingridientShape } from "../utils/proptypes" 
 
 function IngridientDeatils({ ingridient, handleClose }) {
   return (
@@ -30,14 +31,6 @@ function IngridientDeatils({ ingridient, handleClose }) {
     </Modal>
   )
 }
-
-const ingridientShape = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
-})
-
 
 IngridientDeatils.propTypes = {
   ingridient: ingridientShape.isRequired,

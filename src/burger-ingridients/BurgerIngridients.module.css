@@ -2,7 +2,7 @@
   max-width: 600px;
 }
 
-.grid {
+.gridContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 24px;
@@ -14,10 +14,6 @@
   max-height: 758px;
 }
 
-.flex {
+.tabContainer {
   display: flex;
-}
-
-.flex-start {
-  align-self: flex-start;
 }
