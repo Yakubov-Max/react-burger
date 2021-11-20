@@ -5,9 +5,6 @@ import PropTypes from 'prop-types'
 import Ingridient from "../ingridient/Ingridient";
 import { ingridientShape } from "../utils/proptypes";
 
-
-
-
 const BurgerIngridients = ({ ingridients }) => {
   const [current, setCurrent] = React.useState(null)
 

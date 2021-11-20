@@ -21,8 +21,8 @@ const Ingridient = ({ ingridient }) => {
     <div onClick={handleOpen} className={ingridientStyles.container}>
       <Counter count={1} size="default" />
       <img src={ingridient.image} alt={ingridient.name} />
-      <div className='pt-1 pb-1 flex'>
-        <span className="text text_type_digits-default flex">{ingridient.price}</span>
+      <div className={`${ingridientStyles.flexContainer} pt-1 pb-1`}>
+        <span className={`$ text text_type_digits-default pr-2`}>{ingridient.price}</span>
         <CurrencyIcon type={"primary"} />
       </div>
       <p className="text text_type_main-default text_color_primary">{ingridient.name}</p>
