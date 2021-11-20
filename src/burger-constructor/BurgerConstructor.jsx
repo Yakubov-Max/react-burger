@@ -32,7 +32,7 @@ const BurgerConstructor = ({ ingridients }) => {
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {mainIngridients.map((item) => (
-          <li key={item._id} className={'ml-8'}>
+          <li key={item._id} className={'ml-4'}>
             <ConstructorElement
               type={null}
               isLocked={false}

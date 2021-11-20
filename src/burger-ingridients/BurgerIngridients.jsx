@@ -25,8 +25,6 @@ const BurgerIngridients = ({ ingridients }) => {
     }
   }, [current])
 
-  console.log(ingridients[0])
-
   const main = ingridients.filter((ingredient) => ingredient.type === 'main');
   const buns = ingridients.filter((ingredient) => ingredient.type === 'bun');
   const sauces = ingridients.filter((ingredient) => ingredient.type === 'sauce');
