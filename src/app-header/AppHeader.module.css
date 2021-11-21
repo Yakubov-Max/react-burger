@@ -1,12 +1,17 @@
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  max-width: 1920px;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .itemContainer {
   display: flex;
   align-items: center;
   text-decoration: none;
+}
+
+.flex {
+  display: flex;
 }

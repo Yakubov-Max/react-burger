@@ -15,3 +15,12 @@
   list-style-image: url('../images/constructor-vector.svg');
   gap: 16px;
 }
+
+.flexContainer {
+  display: flex;
+  align-items: center;
+}
+
+.checkoutContainer {
+  align-self: flex-end;
+}

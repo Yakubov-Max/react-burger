@@ -1,20 +1,35 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import ingridientsStyles from "./BurgerIngridients.module.css"
-import { CurrencyIcon, Tab, Counter } from "@ya.praktikum/react-developer-burger-ui-components"
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import PropTypes from 'prop-types'
+import Ingridient from "../ingridient/Ingridient";
+import { ingridientShape } from "../utils/proptypes";
 
+const BurgerIngridients = ({ ingridients }) => {
+  const [current, setCurrent] = React.useState(null)
 
+  const bunTab = useRef();
+  const sauceTab = useRef();
+  const mainTab = useRef();
 
-function BurgerIngridients(props) {
-  const main = props.data.filter((ingredient) => ingredient.type === 'main');
-  const buns = props.data.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = props.data.filter((ingredient) => ingredient.type === 'sauce');
-  const [current, setCurrent] = React.useState('buns')
+  useEffect(() => {
+    if (current === "buns" && current !== null) {
+      bunTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "sauces") {
+      sauceTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "main") {
+      mainTab.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [current])
+
+  const main = ingridients.filter((ingredient) => ingredient.type === 'main');
+  const buns = ingridients.filter((ingredient) => ingredient.type === 'bun');
+  const sauces = ingridients.filter((ingredient) => ingredient.type === 'sauce');
 
   return (
     <section className={`pt-10 pr-10 ${ingridientsStyles.container}`}>
-      <h2 style={{ alignSelf: "flex-start" }} className={`pb-5 text text_type_main-large`}>Соберите бургер</h2>
-      <div style={{ display: 'flex' }}>
+      <h2 className={`pb-5 text text_type_main-large`}>Соберите бургер</h2>
+      <div className={ingridientsStyles.tabContainer}>
         <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
           Булки
         </Tab>
@@ -26,27 +41,27 @@ function BurgerIngridients(props) {
         </Tab>
       </div>
       <div className={`mt-10 pr-1 custom-scroll ${ingridientsStyles.typeContainer}`}>
-        <div className={` ${ingridientsStyles.typeSection}`}>
+        <div ref={bunTab} className={` ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Булки</h3>
-          <div className={ingridientsStyles.grid}>
-            {buns.map((item, index) => (
-              <IngridientItem key={item._id + "bun"} ingridient={item} />
+          <div className={ingridientsStyles.gridContainer}>
+            {buns.map((item) => (
+              <Ingridient key={item._id + "bun"} ingridient={item} />
             ))}
           </div>
         </div>
-        <div className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={sauceTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Соусы</h3>
-          <div className={ingridientsStyles.grid}>
-            {sauces.map((item, index) => (
-              <IngridientItem key={item._id + "_sauce"} ingridient={item} />
+          <div className={ingridientsStyles.gridContainer}>
+            {sauces.map((item) => (
+              <Ingridient key={item._id + "_sauce"} ingridient={item} />
             ))}
           </div>
         </div>
-        <div className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={mainTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Начинки</h3>
-          <div className={ingridientsStyles.grid}>
-            {main.map((item, index) => (
-              <IngridientItem key={item._id + "_main"} ingridient={item} />
+          <div className={ingridientsStyles.gridContainer}>
+            {main.map((item) => (
+              <Ingridient key={item._id + "_main"} ingridient={item} />
             ))}
           </div>
         </div>
@@ -55,33 +70,8 @@ function BurgerIngridients(props) {
   )
 }
 
-const IngridientItem = ({ ingridient }) => {
-  return (
-    <div className={ingridientsStyles.itemContainer}>
-      <Counter count={1} size="default" />
-      <img src={ingridient.image} alt={ingridient.name} />
-      <div className='pt-1 pb-1' style={{ display: "flex" }}>
-        <span className="text text_type_digits-default" style={{textAlign:"center"}}>{ingridient.price}</span>
-        <CurrencyIcon type={"primary"} />
-      </div>
-      <p className="text text_type_main-default text_color_primary">{ingridient.name}</p>
-    </div>
-  )
-}
-
-const ingridientShape = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
-})
-
-IngridientItem.propTypes = {
-  ingridient: ingridientShape,
-}
-
 BurgerIngridients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object)
+  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerIngridients
