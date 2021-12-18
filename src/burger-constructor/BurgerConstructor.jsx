@@ -12,6 +12,9 @@ const BurgerConstructor = () => {
   
   const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
+  const bun = ingridients[0]
+  const bunPrice = bun.price * 2
+
   const handleClose = () => {
     setModal(false)
   }
@@ -27,9 +30,9 @@ const BurgerConstructor = () => {
         type={'top'}
         isLocked={true}
         handleClose={undefined}
-        text={`${ingridients[0].name} (верх)`}
-        thumbnail={ingridients[0].image}
-        price={ingridients[0].price} />
+        text={`${bun.name} (верх)`}
+        thumbnail={bun.image}
+        price={bun.price} />
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {mainIngridients.map((item) => (
@@ -50,9 +53,9 @@ const BurgerConstructor = () => {
         type={'bottom'}
         isLocked={true}
         handleClose={undefined}
-        text={`${ingridients[0].name} (низ)`}
-        thumbnail={ingridients[0].image}
-        price={ingridients[0].price} />
+        text={`${bun.name} (низ)`}
+        thumbnail={bun.image}
+        price={bun.price} />
 
       <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.checkoutContainer}`}>
         <div className={`pr-10 ${constructorStyles.flexContainer}`}>
