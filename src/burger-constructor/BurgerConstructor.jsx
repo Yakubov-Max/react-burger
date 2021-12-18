@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
 import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
 import { ingridientShape } from "../utils/proptypes";
+import { ingridientContext } from "../services/ingridientContext";
 
-
-const BurgerConstructor = ({ ingridients }) => {
+const BurgerConstructor = () => {
+  const ingridients = useContext(ingridientContext)
   const [modalOpen, setModal] = useState(false)
   
   const mainIngridients = ingridients.filter((item) => item.type !== "bun")

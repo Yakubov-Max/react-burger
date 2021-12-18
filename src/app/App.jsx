@@ -4,13 +4,14 @@ import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingridients/BurgerIngridients';
 import appStyles from './App.module.css'
 import { INGREDIENTS_URL } from '../utils/constants'
+import { ingridientContext } from '../services/ingridientContext';
 
 function App() {
   const [ingridients, setData] = useState(null);
 
   useEffect(() => {
     downloadData().then((data) => setData(data))
-    
+
   }, [])
 
   const downloadData = async () => {
@@ -29,10 +30,10 @@ function App() {
       <main className={appStyles.container}>
         {
           ingridients && (
-            <>
-              <BurgerIngridients ingridients={ingridients} />
-              <BurgerConstructor ingridients={ingridients} />
-            </>
+            <ingridientContext.Provider value={ingridients}>
+              <BurgerIngridients />
+              <BurgerConstructor />
+            </ingridientContext.Provider>
           )
         }
       </main>
