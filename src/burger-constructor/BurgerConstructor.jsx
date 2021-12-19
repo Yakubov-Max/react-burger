@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
 import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
@@ -11,6 +11,11 @@ const BurgerConstructor = () => {
 
   const [modalOpen, setModal] = useState(false)
   const [orderNumber, setOrderNumber] = useState(null)
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  useEffect(() => {
+    setTotalPrice(calculateTotalPrice())
+  }, [ingridients])
 
   const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
@@ -29,6 +34,10 @@ const BurgerConstructor = () => {
   const handleOpen = () => {
     sendOrder(ingridientsId)
     setModal(true)
+  }
+
+  const calculateTotalPrice = () => {
+    return ingridients.reduce((sum, ingridient) => sum + ingridient.price, bunPrice)
   }
 
   const sendOrder = async (ingridientsId) => {
@@ -84,7 +93,7 @@ const BurgerConstructor = () => {
 
       <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.checkoutContainer}`}>
         <div className={`pr-10 ${constructorStyles.flexContainer}`}>
-          <p className="pr-2 text text_type_digits-medium text_color_primary">610</p>
+          <p className="pr-2 text text_type_digits-medium text_color_primary">{totalPrice}</p>
           <CurrencyIcon className="pr-10" />
         </div>
         <Button type="primary" onClick={handleOpen} size="medium">
