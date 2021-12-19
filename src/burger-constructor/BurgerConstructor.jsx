@@ -8,19 +8,44 @@ import { ingridientContext } from "../services/ingridientContext";
 
 const BurgerConstructor = () => {
   const ingridients = useContext(ingridientContext)
+
   const [modalOpen, setModal] = useState(false)
-  
+  const [orderNumber, setOrderNumber] = useState(null)
+
   const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
   const bun = ingridients[0]
   const bunPrice = bun.price * 2
+
+  const ingridientsId = []
+  ingridients.forEach(element => {
+    ingridientsId.push(element._id)
+  });
 
   const handleClose = () => {
     setModal(false)
   }
 
   const handleOpen = () => {
+    sendOrder(ingridientsId)
     setModal(true)
+  }
+
+  const sendOrder = async (ingridientsId) => {
+    try {
+      const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ingredients: ingridientsId })
+      })
+      const data = await res.json()
+      setOrderNumber(data.order.number)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -67,7 +92,7 @@ const BurgerConstructor = () => {
         </Button>
       </div>
       {modalOpen &&
-        <OrderDetails handleClose={handleClose}></OrderDetails>
+        <OrderDetails handleClose={handleClose} orderNumber={orderNumber}></OrderDetails>
       }
     </section>
   )
