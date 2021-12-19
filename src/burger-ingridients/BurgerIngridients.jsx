@@ -1,9 +1,7 @@
 import React, {useRef, useEffect, useContext} from "react";
 import ingridientsStyles from "./BurgerIngridients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
-import PropTypes from 'prop-types'
 import Ingridient from "../ingridient/Ingridient";
-import { ingridientShape } from "../utils/proptypes";
 import { ingridientContext } from "../services/ingridientContext";
 
 const BurgerIngridients = () => {
@@ -70,10 +68,6 @@ const BurgerIngridients = () => {
       </div>
     </section>
   )
-}
-
-BurgerIngridients.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerIngridients

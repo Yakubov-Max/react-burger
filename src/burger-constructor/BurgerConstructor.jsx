@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
-import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
-import { ingridientShape } from "../utils/proptypes";
 import { ingridientContext } from "../services/ingridientContext";
 
 const BurgerConstructor = () => {
@@ -13,14 +11,14 @@ const BurgerConstructor = () => {
   const [orderNumber, setOrderNumber] = useState(null)
   const [totalPrice, setTotalPrice] = useState(0)
 
-  useEffect(() => {
-    setTotalPrice(calculateTotalPrice())
-  }, [ingridients])
-
-  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
-
   const bun = ingridients[0]
   const bunPrice = bun.price * 2
+
+  useEffect(() => {
+    setTotalPrice(ingridients.reduce((sum, ingridient) => sum + ingridient.price, bunPrice))
+  }, [ingridients, bunPrice])
+
+  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
 
   const ingridientsId = []
   ingridients.forEach(element => {
@@ -36,9 +34,6 @@ const BurgerConstructor = () => {
     setModal(true)
   }
 
-  const calculateTotalPrice = () => {
-    return ingridients.reduce((sum, ingridient) => sum + ingridient.price, bunPrice)
-  }
 
   const sendOrder = async (ingridientsId) => {
     try {
@@ -105,10 +100,6 @@ const BurgerConstructor = () => {
       }
     </section>
   )
-}
-
-BurgerConstructor.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerConstructor;
