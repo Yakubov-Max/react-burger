@@ -36,19 +36,20 @@ const BurgerConstructor = () => {
 
 
   const sendOrder = async (ingredientsId) => {
-    try {
-      const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ingredients: ingredientsId })
-      })
+    const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ingredients: ingredientsId })
+    })
+    
+    if (res.ok) {
       const data = await res.json()
       setOrderNumber(data.order.number)
-    } catch (err) {
-      console.log(err)
+    } else {
+      throw new Error("error")
     }
   }
 
