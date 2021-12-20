@@ -8,7 +8,6 @@ import Modal from "../modal/Modal";
 const BurgerConstructor = () => {
   const ingredients = useContext(ingredientContext)
 
-  const [modalOpen, setModal] = useState(false)
   const [orderNumber, setOrderNumber] = useState(null)
   const [totalPrice, setTotalPrice] = useState(0)
 
@@ -27,12 +26,11 @@ const BurgerConstructor = () => {
   });
 
   const handleClose = () => {
-    setModal(false)
+    setOrderNumber(null)
   }
 
   const handleOpen = () => {
     sendOrder(ingredientsId)
-    setModal(true)
   }
 
 
@@ -97,10 +95,11 @@ const BurgerConstructor = () => {
           Оформить заказ
         </Button>
       </div>
-      {modalOpen &&
+      {orderNumber && (
         <Modal handleClose={handleClose}>
           <OrderDetails orderNumber={orderNumber}></OrderDetails>
         </Modal>
+      )
       }
     </section>
   )
