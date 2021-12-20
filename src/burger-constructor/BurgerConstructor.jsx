@@ -3,6 +3,7 @@ import constructorStyles from "./BurgerConstructor.module.css"
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
 import { ingredientContext } from "../services/ingredientContext";
+import Modal from "../modal/Modal";
 
 const BurgerConstructor = () => {
   const ingredients = useContext(ingredientContext)
@@ -44,7 +45,7 @@ const BurgerConstructor = () => {
       },
       body: JSON.stringify({ ingredients: ingredientsId })
     })
-    
+
     if (res.ok) {
       const data = await res.json()
       setOrderNumber(data.order.number)
@@ -97,7 +98,9 @@ const BurgerConstructor = () => {
         </Button>
       </div>
       {modalOpen &&
-        <OrderDetails handleClose={handleClose} orderNumber={orderNumber}></OrderDetails>
+        <Modal handleClose={handleClose}>
+          <OrderDetails orderNumber={orderNumber}></OrderDetails>
+        </Modal>
       }
     </section>
   )

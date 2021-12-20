@@ -4,6 +4,7 @@ import ingredientStyles from './ingredient.module.css'
 import IngredientDeatils from "../ingredient-details/IngredientDetails"
 import { useState } from "react"
 import { ingredientShape } from "../utils/proptypes"
+import Modal from "../modal/Modal"
 
 const Ingredient = ({ ingredient }) => {
   const [modalOpen, setModal] = useState(false)
@@ -27,8 +28,11 @@ const Ingredient = ({ ingredient }) => {
       </div>
       <p className="text text_type_main-default text_color_primary">{ingredient.name}</p>
     </div>
-      {modalOpen && 
-        <IngredientDeatils ingredient={ingredient} handleClose={handleClose}></IngredientDeatils>
+      {modalOpen &&
+      <Modal handleClose={handleClose}>
+        <IngredientDeatils ingredient={ingredient}></IngredientDeatils>
+      </Modal>
+        
       }
     </>
   )

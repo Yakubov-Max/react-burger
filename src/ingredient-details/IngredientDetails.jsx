@@ -1,12 +1,11 @@
 import React from "react";
-import Modal from "../modal/Modal";
 import ingredientStyles from "./IngredientDetails.module.css"
 import PropTypes from "prop-types"
-import { ingredientShape } from "../utils/proptypes" 
+import { ingredientShape } from "../utils/proptypes"
 
-function IngredientDeatils({ ingredient, handleClose }) {
+function IngredientDeatils({ ingredient }) {
   return (
-    <Modal handleClose={handleClose}>
+    <>
       <h3 className={`${ingredientStyles.header} pl-10 pt-10 text text_type_main-large text_color_primary`}>Детали ингредиента</h3>
       <img className={ingredientStyles.image} src={ingredient.image} alt={ingredient.name} />
       <p className="pb-8 pt-4 text text_type_main-medium text_color_primary">{ingredient.name}</p>
@@ -28,13 +27,12 @@ function IngredientDeatils({ ingredient, handleClose }) {
           <p className="text text_type_digits-default text_color_inactive">{ingredient.carbohydrates}</p>
         </li>
       </ul>
-    </Modal>
+    </>
   )
 }
 
 IngredientDeatils.propTypes = {
-  ingredient: ingredientShape.isRequired,
-  handleClose: PropTypes.func.isRequired
+  ingredient: ingredientShape.isRequired
 }
 
 export default IngredientDeatils
