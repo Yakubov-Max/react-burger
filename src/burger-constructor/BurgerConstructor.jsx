@@ -2,27 +2,27 @@ import { useContext, useEffect, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
-import { ingridientContext } from "../services/ingridientContext";
+import { ingredientContext } from "../services/ingredientContext";
 
 const BurgerConstructor = () => {
-  const ingridients = useContext(ingridientContext)
+  const ingredients = useContext(ingredientContext)
 
   const [modalOpen, setModal] = useState(false)
   const [orderNumber, setOrderNumber] = useState(null)
   const [totalPrice, setTotalPrice] = useState(0)
 
-  const bun = ingridients[0]
+  const bun = ingredients[0]
   const bunPrice = bun.price * 2
 
   useEffect(() => {
-    setTotalPrice(ingridients.reduce((sum, ingridient) => sum + ingridient.price, bunPrice))
-  }, [ingridients, bunPrice])
+    setTotalPrice(ingredients.reduce((sum, ingredient) => sum + ingredient.price, bunPrice))
+  }, [ingredients, bunPrice])
 
-  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
+  const mainIngridients = ingredients.filter((item) => item.type !== "bun")
 
-  const ingridientsId = []
-  ingridients.forEach(element => {
-    ingridientsId.push(element._id)
+  const ingredientsId = []
+  ingredients.forEach(element => {
+    ingredientsId.push(element._id)
   });
 
   const handleClose = () => {
@@ -30,12 +30,12 @@ const BurgerConstructor = () => {
   }
 
   const handleOpen = () => {
-    sendOrder(ingridientsId)
+    sendOrder(ingredientsId)
     setModal(true)
   }
 
 
-  const sendOrder = async (ingridientsId) => {
+  const sendOrder = async (ingredientsId) => {
     try {
       const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
         method: 'POST',
@@ -43,7 +43,7 @@ const BurgerConstructor = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ ingredients: ingridientsId })
+        body: JSON.stringify({ ingredients: ingredientsId })
       })
       const data = await res.json()
       setOrderNumber(data.order.number)

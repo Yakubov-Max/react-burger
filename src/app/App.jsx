@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
-import BurgerIngridients from '../burger-ingridients/BurgerIngridients';
+import BurgerIngridients from '../burger-ingredients/BurgerIngredients';
 import appStyles from './App.module.css'
 import { INGREDIENTS_URL } from '../utils/constants'
-import { ingridientContext } from '../services/ingridientContext';
+import { ingredientContext } from '../services/ingredientContext';
 
 function App() {
-  const [ingridients, setData] = useState(null);
+  const [ingredients, setData] = useState(null);
 
   useEffect(() => {
     downloadData().then((data) => setData(data))
@@ -29,11 +29,11 @@ function App() {
       <AppHeader></AppHeader>
       <main className={appStyles.container}>
         {
-          ingridients && (
-            <ingridientContext.Provider value={ingridients}>
+          ingredients && (
+            <ingredientContext.Provider value={ingredients}>
               <BurgerIngridients />
               <BurgerConstructor />
-            </ingridientContext.Provider>
+            </ingredientContext.Provider>
           )
         }
       </main>
