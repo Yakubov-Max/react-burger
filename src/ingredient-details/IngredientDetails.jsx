@@ -1,9 +1,8 @@
 import React from "react";
 import ingredientStyles from "./IngredientDetails.module.css"
-import PropTypes from "prop-types"
 import { ingredientShape } from "../utils/proptypes"
 
-function IngredientDeatils({ ingredient }) {
+function IngredientDetails({ ingredient }) {
   return (
     <>
       <h3 className={`${ingredientStyles.header} pl-10 pt-10 text text_type_main-large text_color_primary`}>Детали ингредиента</h3>
@@ -31,8 +30,8 @@ function IngredientDeatils({ ingredient }) {
   )
 }
 
-IngredientDeatils.propTypes = {
+IngredientDetails.propTypes = {
   ingredient: ingredientShape.isRequired
 }
 
-export default IngredientDeatils
+export default IngredientDetails

@@ -1,7 +1,7 @@
 import React from "react"
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import ingredientStyles from './ingredient.module.css'
-import IngredientDeatils from "../ingredient-details/IngredientDetails"
+import IngredientDetails from "../ingredient-details/IngredientDetails"
 import { useState } from "react"
 import { ingredientShape } from "../utils/proptypes"
 import Modal from "../modal/Modal"
@@ -30,7 +30,7 @@ const Ingredient = ({ ingredient }) => {
     </div>
       {modalOpen &&
       <Modal handleClose={handleClose}>
-        <IngredientDeatils ingredient={ingredient}></IngredientDeatils>
+        <IngredientDetails ingredient={ingredient}></IngredientDetails>
       </Modal>
         
       }
