@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
@@ -9,14 +9,11 @@ const BurgerConstructor = () => {
   const ingredients = useContext(ingredientContext)
 
   const [orderNumber, setOrderNumber] = useState(null)
-  const [totalPrice, setTotalPrice] = useState(0)
 
   const bun = ingredients[0]
   const bunPrice = bun.price * 2
 
-  useEffect(() => {
-    setTotalPrice(ingredients.reduce((sum, ingredient) => sum + ingredient.price, bunPrice))
-  }, [ingredients, bunPrice])
+  const totalPrice = useMemo(() => ingredients.reduce((sum, ingredient) => sum + ingredient.price, bunPrice))
 
   const mainIngridients = ingredients.filter((item) => item.type !== "bun")
 
