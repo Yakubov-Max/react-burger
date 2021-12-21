@@ -1,11 +1,11 @@
-import React, {useRef, useEffect} from "react";
-import ingridientsStyles from "./BurgerIngridients.module.css"
+import React, {useRef, useEffect, useContext} from "react";
+import ingredientsStyles from "./BurgerIngredients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
-import PropTypes from 'prop-types'
-import Ingridient from "../ingridient/Ingridient";
-import { ingridientShape } from "../utils/proptypes";
+import Ingredient from "../ingredient/Ingredient";
+import { ingredientContext } from "../services/ingredientContext";
 
-const BurgerIngridients = ({ ingridients }) => {
+const BurgerIngredients = () => {
+  const ingredients = useContext(ingredientContext)
   const [current, setCurrent] = React.useState(null)
 
   const bunTab = useRef();
@@ -22,14 +22,14 @@ const BurgerIngridients = ({ ingridients }) => {
     }
   }, [current])
 
-  const main = ingridients.filter((ingredient) => ingredient.type === 'main');
-  const buns = ingridients.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = ingridients.filter((ingredient) => ingredient.type === 'sauce');
+  const main = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
+  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce');
 
   return (
-    <section className={`pt-10 pr-10 ${ingridientsStyles.container}`}>
+    <section className={`pt-10 pr-10 ${ingredientsStyles.container}`}>
       <h2 className={`pb-5 text text_type_main-large`}>Соберите бургер</h2>
-      <div className={ingridientsStyles.tabContainer}>
+      <div className={ingredientsStyles.tabContainer}>
         <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
           Булки
         </Tab>
@@ -40,28 +40,28 @@ const BurgerIngridients = ({ ingridients }) => {
           Начинки
         </Tab>
       </div>
-      <div className={`mt-10 pr-1 custom-scroll ${ingridientsStyles.typeContainer}`}>
-        <div ref={bunTab} className={` ${ingridientsStyles.typeSection}`}>
+      <div className={`mt-10 pr-1 custom-scroll ${ingredientsStyles.typeContainer}`}>
+        <div ref={bunTab} className={` ${ingredientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Булки</h3>
-          <div className={ingridientsStyles.gridContainer}>
+          <div className={ingredientsStyles.gridContainer}>
             {buns.map((item) => (
-              <Ingridient key={item._id + "bun"} ingridient={item} />
+              <Ingredient key={item._id + "bun"} ingredient={item} />
             ))}
           </div>
         </div>
-        <div ref={sauceTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={sauceTab} className={`pt-10 ${ingredientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Соусы</h3>
-          <div className={ingridientsStyles.gridContainer}>
+          <div className={ingredientsStyles.gridContainer}>
             {sauces.map((item) => (
-              <Ingridient key={item._id + "_sauce"} ingridient={item} />
+              <Ingredient key={item._id + "_sauce"} ingredient={item} />
             ))}
           </div>
         </div>
-        <div ref={mainTab} className={`pt-10 ${ingridientsStyles.typeSection}`}>
+        <div ref={mainTab} className={`pt-10 ${ingredientsStyles.typeSection}`}>
           <h3 className='pb-6 text text_type_main-medium'>Начинки</h3>
-          <div className={ingridientsStyles.gridContainer}>
+          <div className={ingredientsStyles.gridContainer}>
             {main.map((item) => (
-              <Ingridient key={item._id + "_main"} ingridient={item} />
+              <Ingredient key={item._id + "_main"} ingredient={item} />
             ))}
           </div>
         </div>
@@ -70,8 +70,4 @@ const BurgerIngridients = ({ ingridients }) => {
   )
 }
 
-BurgerIngridients.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
-}
-
-export default BurgerIngridients
+export default BurgerIngredients

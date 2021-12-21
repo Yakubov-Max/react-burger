@@ -8,23 +8,23 @@ import PropTypes from "prop-types"
 function Modal({ children, handleClose }) {
   const modalRoot = document.getElementById('modal-root')
 
-  const handleEscKey = (e) => {
-    if (e.key === "Escape") {
-      handleClose()
-    }
-  }
-
   const stopPropagation = (e) => {
     e.stopPropagation()
   }
 
   useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === "Escape") {
+        handleClose()
+      }
+    }
+
     document.addEventListener('keyup', handleEscKey)
 
     return () => {
       document.removeEventListener('keyup', handleEscKey)
     }
-  }, [])
+  }, [handleClose])
 
   return ReactDOM.createPortal(
     (

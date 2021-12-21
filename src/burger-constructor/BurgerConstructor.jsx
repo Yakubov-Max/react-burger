@@ -1,22 +1,52 @@
-import React, { useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import constructorStyles from "./BurgerConstructor.module.css"
-import PropTypes from 'prop-types'
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
-import { ingridientShape } from "../utils/proptypes";
+import { ingredientContext } from "../services/ingredientContext";
+import Modal from "../modal/Modal";
 
+const BurgerConstructor = () => {
+  const ingredients = useContext(ingredientContext)
 
-const BurgerConstructor = ({ ingridients }) => {
-  const [modalOpen, setModal] = useState(false)
-  
-  const mainIngridients = ingridients.filter((item) => item.type !== "bun")
+  const [orderNumber, setOrderNumber] = useState(null)
+
+  const bun = ingredients[0]
+  const bunPrice = bun.price * 2
+
+  const totalPrice = useMemo(() => ingredients.reduce((sum, ingredient) => sum + ingredient.price, bunPrice), [ingredients, bunPrice])
+
+  const mainIngridients = ingredients.filter((item) => item.type !== "bun")
+
+  const ingredientsId = []
+  ingredients.forEach(element => {
+    ingredientsId.push(element._id)
+  });
 
   const handleClose = () => {
-    setModal(false)
+    setOrderNumber(null)
   }
 
   const handleOpen = () => {
-    setModal(true)
+    sendOrder(ingredientsId)
+  }
+
+
+  const sendOrder = async (ingredientsId) => {
+    const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ingredients: ingredientsId })
+    })
+
+    if (res.ok) {
+      const data = await res.json()
+      setOrderNumber(data.order.number)
+    } else {
+      throw new Error("error")
+    }
   }
 
   return (
@@ -26,9 +56,9 @@ const BurgerConstructor = ({ ingridients }) => {
         type={'top'}
         isLocked={true}
         handleClose={undefined}
-        text={`${ingridients[0].name} (верх)`}
-        thumbnail={ingridients[0].image}
-        price={ingridients[0].price} />
+        text={`${bun.name} (верх)`}
+        thumbnail={bun.image}
+        price={bun.price} />
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {mainIngridients.map((item) => (
@@ -49,28 +79,27 @@ const BurgerConstructor = ({ ingridients }) => {
         type={'bottom'}
         isLocked={true}
         handleClose={undefined}
-        text={`${ingridients[0].name} (низ)`}
-        thumbnail={ingridients[0].image}
-        price={ingridients[0].price} />
+        text={`${bun.name} (низ)`}
+        thumbnail={bun.image}
+        price={bun.price} />
 
       <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.checkoutContainer}`}>
         <div className={`pr-10 ${constructorStyles.flexContainer}`}>
-          <p className="pr-2 text text_type_digits-medium text_color_primary">610</p>
+          <p className="pr-2 text text_type_digits-medium text_color_primary">{totalPrice}</p>
           <CurrencyIcon className="pr-10" />
         </div>
         <Button type="primary" onClick={handleOpen} size="medium">
           Оформить заказ
         </Button>
       </div>
-      {modalOpen &&
-        <OrderDetails handleClose={handleClose}></OrderDetails>
+      {orderNumber && (
+        <Modal handleClose={handleClose}>
+          <OrderDetails orderNumber={orderNumber}></OrderDetails>
+        </Modal>
+      )
       }
     </section>
   )
-}
-
-BurgerConstructor.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientShape).isRequired
 }
 
 export default BurgerConstructor;
