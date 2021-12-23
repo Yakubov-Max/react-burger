@@ -2,10 +2,10 @@ import React, {useRef, useEffect, useContext} from "react";
 import ingredientsStyles from "./BurgerIngredients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import Ingredient from "../ingredient/Ingredient";
-import { ingredientContext } from "../services/ingredientContext";
+import { useDispatch, useSelector } from "react-redux";
 
 const BurgerIngredients = () => {
-  const ingredients = useContext(ingredientContext)
+  const ingredients = useSelector(state => state.burger.ingredients)
   const [current, setCurrent] = React.useState(null)
 
   const bunTab = useRef();

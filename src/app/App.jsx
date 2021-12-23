@@ -3,26 +3,16 @@ import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingredients/BurgerIngredients';
 import appStyles from './App.module.css'
-import { INGREDIENTS_URL } from '../utils/constants'
-import { ingredientContext } from '../services/ingredientContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIngredients } from '../services/actions/burger';
 
 function App() {
-  const [ingredients, setData] = useState(null);
+  const dispatch = useDispatch()
+  const ingredients = useSelector(state => state.burger.ingredients)
 
   useEffect(() => {
-    downloadData().then((data) => setData(data))
-
-  }, [])
-
-  const downloadData = async () => {
-    try {
-      const res = await fetch(INGREDIENTS_URL)
-      const dataObj = await res.json()
-      return dataObj.data
-    } catch (err) {
-      console.log(err)
-    }
-  }
+    dispatch(getIngredients())
+  },[dispatch])
 
   return (
     <div className="App">
@@ -30,10 +20,10 @@ function App() {
       <main className={appStyles.container}>
         {
           ingredients && (
-            <ingredientContext.Provider value={ingredients}>
+            <>
               <BurgerIngridients />
               <BurgerConstructor />
-            </ingredientContext.Provider>
+            </>
           )
         }
       </main>

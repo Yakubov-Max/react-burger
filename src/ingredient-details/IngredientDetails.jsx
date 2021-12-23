@@ -1,8 +1,10 @@
 import React from "react";
 import ingredientStyles from "./IngredientDetails.module.css"
-import { ingredientShape } from "../utils/proptypes"
+import { useSelector } from "react-redux";
 
-function IngredientDetails({ ingredient }) {
+function IngredientDetails() {
+  const ingredient = useSelector(state => state.burger.currentIngredient)
+
   return (
     <>
       <h3 className={`${ingredientStyles.header} pl-10 pt-10 text text_type_main-large text_color_primary`}>Детали ингредиента</h3>
@@ -28,10 +30,6 @@ function IngredientDetails({ ingredient }) {
       </ul>
     </>
   )
-}
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientShape.isRequired
 }
 
 export default IngredientDetails
