@@ -1,8 +1,8 @@
-import React, {useRef, useEffect, useContext} from "react";
+import React, {useRef, useEffect} from "react";
 import ingredientsStyles from "./BurgerIngredients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import Ingredient from "../ingredient/Ingredient";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const BurgerIngredients = () => {
   const ingredients = useSelector(state => state.burger.ingredients)
@@ -45,7 +45,7 @@ const BurgerIngredients = () => {
           <h3 className='pb-6 text text_type_main-medium'>Булки</h3>
           <div className={ingredientsStyles.gridContainer}>
             {buns.map((item) => (
-              <Ingredient key={item._id + "bun"} ingredient={item} />
+              <Ingredient key={item._id} ingredient={item} />
             ))}
           </div>
         </div>
@@ -53,7 +53,7 @@ const BurgerIngredients = () => {
           <h3 className='pb-6 text text_type_main-medium'>Соусы</h3>
           <div className={ingredientsStyles.gridContainer}>
             {sauces.map((item) => (
-              <Ingredient key={item._id + "_sauce"} ingredient={item} />
+              <Ingredient key={item._id} ingredient={item} />
             ))}
           </div>
         </div>
@@ -61,7 +61,7 @@ const BurgerIngredients = () => {
           <h3 className='pb-6 text text_type_main-medium'>Начинки</h3>
           <div className={ingredientsStyles.gridContainer}>
             {main.map((item) => (
-              <Ingredient key={item._id + "_main"} ingredient={item} />
+              <Ingredient key={item._id} ingredient={item} />
             ))}
           </div>
         </div>

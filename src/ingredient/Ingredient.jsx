@@ -6,10 +6,16 @@ import { useState } from "react"
 import Modal from "../modal/Modal"
 import { useDispatch } from "react-redux"
 import { ADD_CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from "../services/actions/burger"
+import { useDrag } from "react-dnd"
 
 const Ingredient = ({ ingredient }) => {
   const dispatch = useDispatch()
   const [modalOpen, setModal] = useState(false)
+
+  const [, dragRef] = useDrag({
+    type: 'ingredient',
+    item: {ingredient}
+  })
 
   const handleClose = () => {
     setModal(false)
@@ -28,7 +34,7 @@ const Ingredient = ({ ingredient }) => {
 
   return (
     <>
-      <div onClick={handleOpen} className={ingredientStyles.container}>
+      <div onClick={handleOpen} className={ingredientStyles.container} ref={dragRef}>
         <Counter count={1} size="default" />
         <img src={ingredient.image} alt={ingredient.name} />
         <div className={`${ingredientStyles.flexContainer} pt-1 pb-1`}>
@@ -41,7 +47,6 @@ const Ingredient = ({ ingredient }) => {
         <Modal handleClose={handleClose}>
           <IngredientDetails></IngredientDetails>
         </Modal>
-
       }
     </>
   )
