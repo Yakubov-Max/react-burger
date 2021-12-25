@@ -47,13 +47,19 @@ const BurgerConstructor = () => {
         type: ADD_INGREDIENT,
         item: ingredient.ingredient
       })
-    } else if (ingredient.ingredient.type === 'bun' && !bun) {
+    } else if (ingredient.ingredient.type === 'bun') {
       dispatch({
         type: ADD_BUN,
         item: ingredient.ingredient
       })
     }
+  }
 
+  function handleRemoveIngredient(index) {
+    dispatch({
+      type: REMOVE_INGREDIENT,
+      index: index
+    })
   }
 
   return (
@@ -75,7 +81,7 @@ const BurgerConstructor = () => {
             <ConstructorElement
               type={null}
               isLocked={false}
-              handleClose={undefined}
+              handleClose={() => handleRemoveIngredient(index)}
               text={item.name}
               thumbnail={item.image}
               price={item.price} />

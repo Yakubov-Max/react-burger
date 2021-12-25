@@ -59,12 +59,17 @@ export const burgerReducer = (state = initialState, action) => {
       return { ...state, bun: action.item };
     }
     case ADD_INGREDIENT: {
-      return { ...state, constructorList: [...state.constructorList, action.item] };
+      return {
+        ...state,
+        constructorList: [...state.constructorList, action.item],
+      };
     }
     case REMOVE_INGREDIENT: {
       return {
         ...state,
-        constructorList: [...state.constructorList].filter((item) => item._id !== action.id),
+        constructorList: [...state.constructorList].filter(
+          (_, i) => action.index !== i
+        ),
       };
     }
     case GET_INGREDIENTS_REQUEST: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AppHeader from '../app-header/AppHeader';
 import BurgerConstructor from "../burger-constructor/BurgerConstructor";
 import BurgerIngridients from '../burger-ingredients/BurgerIngredients';
