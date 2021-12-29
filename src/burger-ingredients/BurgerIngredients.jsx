@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import ingredientsStyles from "./BurgerIngredients.module.css"
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import Ingredient from "../ingredient/Ingredient";
@@ -6,22 +6,11 @@ import { useSelector } from "react-redux";
 
 const BurgerIngredients = () => {
   const ingredients = useSelector(state => state.burger.ingredients)
-  const [current, setCurrent] = React.useState(null)
-  const [visible, setVisible] = useState('buns')
+  const [current, setCurrent] = useState('buns')
 
   const bunTab = useRef();
   const sauceTab = useRef();
   const mainTab = useRef();
-
-  useEffect(() => {
-    if (current === "buns" && current !== null) {
-      bunTab.current.scrollIntoView({ behavior: 'smooth' })
-    } else if (current === "sauces") {
-      sauceTab.current.scrollIntoView({ behavior: 'smooth' })
-    } else if (current === "main") {
-      mainTab.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [current])
 
   const main = ingredients.filter((ingredient) => ingredient.type === 'main');
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
@@ -35,27 +24,25 @@ const BurgerIngredients = () => {
     const saucePos = { top: sauceTab.current.getBoundingClientRect().top, bottom: sauceTab.current.getBoundingClientRect().bottom }
 
     if (bunPos.top <= listTop && bunPos.bottom > listTop) {
-      setCurrent(null)
-      setVisible('buns')
+      setCurrent('buns')
     } else if (saucePos.top <= listTop && saucePos.bottom > listTop) {
-      setVisible('sauces')
+      setCurrent('sauces')
     } else if (mainPos.top <= listTop && mainPos.bottom > listTop) {
-      setVisible('main')
+      setCurrent('main')
     }
-
   }
 
   return (
     <section className={`pt-10 pr-10 ${ingredientsStyles.container}`}>
       <h2 className={`pb-5 text text_type_main-large`}>Соберите бургер</h2>
       <div className={ingredientsStyles.tabContainer}>
-        <Tab value="buns" active={current === 'buns' || visible === "buns"} onClick={setCurrent}>
+        <Tab value="buns" active={current === 'buns'} >
           Булки
         </Tab>
-        <Tab value="sauces" active={current === 'sauces' || visible === "sauces"} onClick={setCurrent}>
+        <Tab value="sauces" active={current === 'sauces'}>
           Соусы
         </Tab>
-        <Tab value="main" active={current === 'main' || visible === "main"} onClick={setCurrent}>
+        <Tab value="main" active={current === 'main'}>
           Начинки
         </Tab>
       </div>
