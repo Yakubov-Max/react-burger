@@ -35,6 +35,7 @@ const BurgerIngredients = () => {
     const saucePos = { top: sauceTab.current.getBoundingClientRect().top, bottom: sauceTab.current.getBoundingClientRect().bottom }
 
     if (bunPos.top <= listTop && bunPos.bottom > listTop) {
+      setCurrent(null)
       setVisible('buns')
     } else if (saucePos.top <= listTop && saucePos.bottom > listTop) {
       setVisible('sauces')
