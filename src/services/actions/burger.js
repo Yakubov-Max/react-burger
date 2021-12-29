@@ -18,6 +18,8 @@ export const SEND_ORDER_FAILED = 'SEND_ORDER_FAILED'
 
 export const CLEAR_ORDER_MODAL = 'CLEAR_ORDER_MODAL'
 
+export const SORT_CONSTRUCTOR_LIST = 'SORT_CONSTRUCTOR_LIST'
+
 export function getIngredients() {
   return function(dispatch) {
     dispatch({

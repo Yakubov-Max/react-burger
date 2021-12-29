@@ -2,12 +2,81 @@ import constructorStyles from "./BurgerConstructor.module.css"
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
 import Modal from "../modal/Modal";
-import { useDispatch } from "react-redux";
-import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIENT } from "../services/actions/burger";
-import { useSelector } from "react-redux";
-import { useDrop } from "react-dnd";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIENT, SORT_CONSTRUCTOR_LIST } from "../services/actions/burger";
+import { useDrop, useDrag } from "react-dnd";
+import { useState, useEffect, useCallback, useRef } from "react";
+import update from "immutability-helper";
+
+const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
+  const dispatch = useDispatch()
+  const ref = useRef(null);
+
+  const [{ handlerId }, drop] = useDrop({
+    accept: "constructorIngredient",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveIngredient(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "constructorIngredient",
+    item: () => {
+      return { id: ingredient._id, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const opacity = isDragging ? 0.2 : 1;
+
+  drag(drop(ref));
+
+  function handleRemoveIngredient(index) {
+    dispatch({
+      type: REMOVE_INGREDIENT,
+      index: index
+    })
+  }
+
+  return (
+    <li key={index} className={'ml-4'} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
+      <ConstructorElement
+        type={null}
+        isLocked={false}
+        handleClose={() => handleRemoveIngredient(index)}
+        text={ingredient.name}
+        thumbnail={ingredient.image}
+        price={ingredient.price} />
+    </li>
+  )
+}
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch()
@@ -55,12 +124,21 @@ const BurgerConstructor = () => {
     }
   }
 
-  function handleRemoveIngredient(index) {
-    dispatch({
-      type: REMOVE_INGREDIENT,
-      index: index
-    })
-  }
+  const moveIngredient = useCallback(
+    (dragIndex, hoverIndex) => {
+      const ingredient = constructorList[dragIndex];
+      dispatch({
+        type: SORT_CONSTRUCTOR_LIST,
+        sortedIngredients: update(constructorList, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, ingredient],
+          ],
+        }),
+      });
+    },
+    [constructorList, dispatch]
+  );
 
   return (
     <section ref={dropTarget} className={`pt-25  ${constructorStyles.container}`}>
@@ -77,15 +155,7 @@ const BurgerConstructor = () => {
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {constructorList.map((item, index) => (
-          <li key={index} className={'ml-4'}>
-            <ConstructorElement
-              type={null}
-              isLocked={false}
-              handleClose={() => handleRemoveIngredient(index)}
-              text={item.name}
-              thumbnail={item.image}
-              price={item.price} />
-          </li>
+          <BurgerIngredient key={index} ingredient={item} index={index} moveIngredient={moveIngredient}></BurgerIngredient>
         ))}
       </ul>
 
