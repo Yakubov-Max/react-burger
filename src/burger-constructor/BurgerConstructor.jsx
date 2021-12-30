@@ -148,7 +148,6 @@ const BurgerConstructor = () => {
     <section ref={dropTarget} className={`pt-25  ${constructorStyles.container}`}>
       {bun &&
         <ConstructorElement
-          key={"top"}
           type={'top'}
           isLocked={true}
           handleClose={undefined}
@@ -165,7 +164,6 @@ const BurgerConstructor = () => {
 
       {bun &&
         <ConstructorElement
-          key={"bottom"}
           type={'bottom'}
           isLocked={true}
           handleClose={undefined}
