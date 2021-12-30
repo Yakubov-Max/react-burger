@@ -7,6 +7,7 @@ import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIEN
 import { useDrop, useDrag } from "react-dnd";
 import { useState, useEffect, useCallback, useRef } from "react";
 import update from "immutability-helper";
+import { v4 as uuidv4 } from 'uuid';
 
 const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
   const dispatch = useDispatch()
@@ -66,7 +67,7 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
   }
 
   return (
-    <li key={index} className={'ml-4'} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
+    <li className={'ml-4'} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <ConstructorElement
         type={null}
         isLocked={false}
@@ -114,12 +115,15 @@ const BurgerConstructor = () => {
     if (ingredient.ingredient.type !== 'bun') {
       dispatch({
         type: ADD_INGREDIENT,
-        item: ingredient.ingredient
+        item: {
+          ...ingredient.ingredient,
+          uuid: uuidv4()
+        }
       })
     } else if (ingredient.ingredient.type === 'bun') {
       dispatch({
         type: ADD_BUN,
-        item: ingredient.ingredient
+        item: ingredient.ingredient,
       })
     }
   }
@@ -155,7 +159,7 @@ const BurgerConstructor = () => {
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
         {constructorList.map((item, index) => (
-          <BurgerIngredient key={index} ingredient={item} index={index} moveIngredient={moveIngredient}></BurgerIngredient>
+          <BurgerIngredient key={item.uuid} ingredient={item} index={index} moveIngredient={moveIngredient}></BurgerIngredient>
         ))}
       </ul>
 
