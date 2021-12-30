@@ -17,8 +17,8 @@ function App() {
   }, [dispatch])
 
   return (
-    <div className="App">
-      <AppHeader></AppHeader>
+    <div>
+      <AppHeader />
       <main className={appStyles.container}>
         {
           ingredients && (
