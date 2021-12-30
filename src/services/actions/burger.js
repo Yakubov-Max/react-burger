@@ -1,4 +1,5 @@
 import { INGREDIENTS_URL } from "../../utils/constants"
+import { API_URL } from "../../utils/constants"
 
 export const ADD_INGREDIENT = 'ADD_INGREDIENT'
 export const REMOVE_INGREDIENT = "REMOVE_INGREDIENT"
@@ -63,7 +64,7 @@ export function sendOrder(ingredientsId) {
 }
 
 const sendData = async (ingredientsId) => {
-  const res = await fetch(`https://norma.nomoreparties.space/api/orders`, {
+  const res = await fetch(`${API_URL}/orders`, {
     method: 'POST',
     mode: 'cors',
     headers: {
@@ -83,7 +84,7 @@ const sendData = async (ingredientsId) => {
 
 const downloadData = async () => {
   try {
-    const res = await fetch(INGREDIENTS_URL)
+    const res = await fetch(`${API_URL}/ingredients`)
     const dataObj = await res.json()
     return dataObj
   } catch (err) {
