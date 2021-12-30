@@ -1,5 +1,5 @@
-import { INGREDIENTS_URL } from "../../utils/constants"
 import { API_URL } from "../../utils/constants"
+import { _checkResponse } from "../../utils/funcs"
 
 export const ADD_INGREDIENT = 'ADD_INGREDIENT'
 export const REMOVE_INGREDIENT = "REMOVE_INGREDIENT"
@@ -37,7 +37,7 @@ export function getIngredients() {
           type: GET_INGREDIENTS_FAILED
         });
       }
-    });
+    }).catch(error => console.log(`Ошибка: ${error}`));
   };
 }
 
@@ -47,7 +47,6 @@ export function sendOrder(ingredientsId) {
       type: SEND_ORDER_REQUEST
     });
     sendData(ingredientsId).then(res => {
-      console.log(res)
       if (res && res.success) {
         dispatch({
           type: SEND_ORDER_SUCCESS,
@@ -59,35 +58,22 @@ export function sendOrder(ingredientsId) {
           type: SEND_ORDER_FAILED
         });
       }
-    });
+    }).catch(error => console.log(`Ошибка: ${error}`));
   };
 }
 
 const sendData = async (ingredientsId) => {
-  const res = await fetch(`${API_URL}/orders`, {
+  return await fetch(`${API_URL}/orders`, {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ ingredients: ingredientsId })
-  })
-
-  if (res.ok) {
-    const data = await res.json()
-    return data
-  } else {
-    throw new Error("error")
-  }
+  }).then(_checkResponse)
 }
 
 
 const downloadData = async () => {
-  try {
-    const res = await fetch(`${API_URL}/ingredients`)
-    const dataObj = await res.json()
-    return dataObj
-  } catch (err) {
-    console.log(err)
-  }
+  return await fetch(`${API_URL}/ingredients`).then(_checkResponse)
 }
