@@ -1,9 +1,9 @@
-import React from "react"
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import ingredientStyles from './ingredient.module.css'
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
 import { useDrag } from "react-dnd"
+import { ingredientShape } from "../utils/proptypes"
 
 const Ingredient = ({ ingredient, handleClick }) => {
 
@@ -38,6 +38,10 @@ const Ingredient = ({ ingredient, handleClick }) => {
       </div>
     </>
   )
+}
+
+Ingredient.propTypes = {
+  ingredient: ingredientShape.isRequired
 }
 
 export default Ingredient

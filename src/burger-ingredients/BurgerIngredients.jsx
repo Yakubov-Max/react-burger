@@ -43,7 +43,6 @@ const BurgerIngredients = () => {
   }
 
   const handleOpen = (item) => {
-    console.log('clicked')
     dispatch({
       type: ADD_CURRENT_INGREDIENT,
       item: item
