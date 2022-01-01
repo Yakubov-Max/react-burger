@@ -11,7 +11,8 @@ import {
   SEND_ORDER_SUCCESS,
   SEND_ORDER_REQUEST,
   CLEAR_ORDER_MODAL,
-  SORT_CONSTRUCTOR_LIST
+  SORT_CONSTRUCTOR_LIST,
+  CLEAR_CONSTRUCTOR_INGREDIENTS
 } from "../actions/burger";
 
 const initialState = {
@@ -92,6 +93,13 @@ export const burgerReducer = (state = initialState, action) => {
         ingredeintsRequest: false,
         ingredients: action.ingredients,
       };
+    }
+    case CLEAR_CONSTRUCTOR_INGREDIENTS: {
+      return {
+        ...state,
+        constructorList: [],
+        bun: null
+      }
     }
     default: {
       return state;

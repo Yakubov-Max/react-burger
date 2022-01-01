@@ -3,7 +3,7 @@ import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-de
 import OrderDetails from '../order-details/OrderDetails';
 import Modal from "../modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIENT, SORT_CONSTRUCTOR_LIST } from "../services/actions/burger";
+import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIENT, SORT_CONSTRUCTOR_LIST, CLEAR_CONSTRUCTOR_INGREDIENTS} from "../services/actions/burger";
 import { useDrop, useDrag } from "react-dnd";
 import { useState, useEffect, useCallback, useRef } from "react";
 import update from "immutability-helper";
@@ -102,6 +102,10 @@ const BurgerConstructor = () => {
 
   const handleOpen = () => {
     dispatch(sendOrder(constructorList.map(element => element._id)))
+    dispatch({
+      type: CLEAR_CONSTRUCTOR_INGREDIENTS,
+
+    })
   }
 
   const [, dropTarget] = useDrop({

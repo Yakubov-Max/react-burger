@@ -21,6 +21,8 @@ export const CLEAR_ORDER_MODAL = 'CLEAR_ORDER_MODAL'
 
 export const SORT_CONSTRUCTOR_LIST = 'SORT_CONSTRUCTOR_LIST'
 
+export const CLEAR_CONSTRUCTOR_INGREDIENTS = "CLEAR_CONSTRUCTOR_INGREDIENTS"
+
 export function getIngredients() {
   return function(dispatch) {
     dispatch({
