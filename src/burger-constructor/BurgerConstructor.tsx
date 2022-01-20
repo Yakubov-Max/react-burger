@@ -2,16 +2,24 @@ import constructorStyles from "./BurgerConstructor.module.css"
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import OrderDetails from '../order-details/OrderDetails';
 import Modal from "../modal/Modal";
-import { useDispatch, useSelector } from "react-redux";
 import { ADD_BUN, ADD_INGREDIENT, sendOrder, CLEAR_ORDER_MODAL, REMOVE_INGREDIENT, SORT_CONSTRUCTOR_LIST, CLEAR_CONSTRUCTOR_INGREDIENTS} from "../services/actions/burger";
 import { useDrop, useDrag } from "react-dnd";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, FC } from "react";
 import update from "immutability-helper";
 import { v4 as uuidv4 } from 'uuid';
+import {TIngredient} from "../utils/types"
+import {useSelector, useDispatch} from '../utils/hooks'
 
-const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
+
+interface IBurgerIngredient {
+  ingredient: TIngredient,
+  index: number,
+  moveIngredient: Function,
+}
+
+const BurgerIngredient: FC<IBurgerIngredient> = ({ ingredient, index, moveIngredient }) => {
   const dispatch = useDispatch()
-  const ref = useRef(null);
+  const ref = useRef<HTMLLIElement>(null);
 
   const [{ handlerId }, drop] = useDrop({
     accept: "constructorIngredient",
@@ -20,7 +28,7 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
+    hover(item:{id: string, index: number}, monitor) {
       if (!ref.current) {
         return;
       }
@@ -33,7 +41,12 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      let hoverClientY = 0
+      if (clientOffset !== null) {
+        hoverClientY = clientOffset.y - hoverBoundingRect.top 
+      }
+      
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
@@ -59,7 +72,7 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
 
   drag(drop(ref));
 
-  function handleRemoveIngredient(index) {
+  function handleRemoveIngredient(index: number) {
     dispatch({
       type: REMOVE_INGREDIENT,
       index: index
@@ -69,7 +82,7 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
   return (
     <li className={'ml-4'} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <ConstructorElement
-        type={null}
+        type={undefined}
         isLocked={false}
         handleClose={() => handleRemoveIngredient(index)}
         text={ingredient.name}
@@ -79,18 +92,20 @@ const BurgerIngredient = ({ ingredient, index, moveIngredient }) => {
   )
 }
 
+
+
 const BurgerConstructor = () => {
   const dispatch = useDispatch()
   const constructorList = useSelector(state => state.burger.constructorList)
   const orderNumber = useSelector(state => state.burger.orderNumber)
   const bun = useSelector(state => state.burger.bun)
 
-  const [totalPrice, setTotalPrice] = useState(0)
+  const [totalPrice, setTotalPrice] = useState<number>(0)
 
   useEffect(() => {
     if (bun) {
       const bunPrice = bun.price * 2
-      setTotalPrice(constructorList.reduce((sum, ingredient) => sum + ingredient.price, bunPrice))
+      setTotalPrice(constructorList.reduce((sum:number, ingredient: TIngredient) => sum + ingredient.price, bunPrice))
     }
   }, [constructorList, bun])
 
@@ -101,21 +116,20 @@ const BurgerConstructor = () => {
   }
 
   const handleOpen = () => {
-    dispatch(sendOrder(constructorList.map(element => element._id)))
+    dispatch(sendOrder(constructorList.map((element: TIngredient) => element._id)))
     dispatch({
       type: CLEAR_CONSTRUCTOR_INGREDIENTS,
-
     })
   }
 
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(ingredient) {
+    drop(ingredient:{ingredient: TIngredient}) {
       dropHandler(ingredient)
     }
   })
 
-  function dropHandler(ingredient) {
+  function dropHandler(ingredient: {ingredient: TIngredient}): void {
     if (ingredient.ingredient.type !== 'bun') {
       dispatch({
         type: ADD_INGREDIENT,
@@ -161,7 +175,7 @@ const BurgerConstructor = () => {
       }
 
       <ul className={`custom-scroll ${constructorStyles.list} pl-2 mt-4 mb-4 pr-1`}>
-        {constructorList.map((item, index) => (
+        {constructorList.map((item: TIngredient, index:number) => (
           <BurgerIngredient key={item.uuid} ingredient={item} index={index} moveIngredient={moveIngredient}></BurgerIngredient>
         ))}
       </ul>
@@ -179,7 +193,7 @@ const BurgerConstructor = () => {
         <div className={`pt-10 ${constructorStyles.flexContainer} ${constructorStyles.checkoutContainer}`}>
           <div className={`pr-10 ${constructorStyles.flexContainer}`}>
             <p className="pr-2 text text_type_digits-medium text_color_primary">{totalPrice}</p>
-            <CurrencyIcon className="pr-10" />
+            <CurrencyIcon type={"primary"} />
           </div>
           <Button type="primary" onClick={handleOpen} size="medium">
             Оформить заказ
