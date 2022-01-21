@@ -12,10 +12,29 @@ import {
   SEND_ORDER_REQUEST,
   CLEAR_ORDER_MODAL,
   SORT_CONSTRUCTOR_LIST,
-  CLEAR_CONSTRUCTOR_INGREDIENTS
+  CLEAR_CONSTRUCTOR_INGREDIENTS,
+  TActions,
 } from "../actions/burger";
 
-const initialState = {
+import { TIngredient } from "../../utils/types";
+
+type TInitialState = {
+  constructorList: TIngredient[];
+  bun: TIngredient | null;
+
+  ingredients: TIngredient[];
+  ingredeintsRequest: boolean;
+  ingredientsRequestFailed: boolean;
+
+  currentIngredient: TIngredient | null;
+
+  sendOrderFailed: boolean;
+  sendOrderRequest: boolean;
+  currentOrder: TIngredient[] | null;
+  orderNumber: number | null;
+};
+
+const initialState: TInitialState = {
   constructorList: [],
   bun: null,
 
@@ -31,10 +50,13 @@ const initialState = {
   orderNumber: null,
 };
 
-export const burgerReducer = (state = initialState, action) => {
+export const burgerReducer = (
+  state = initialState,
+  action: TActions
+): TInitialState => {
   switch (action.type) {
     case SORT_CONSTRUCTOR_LIST: {
-      return {...state, constructorList: action.sortedIngredients}
+      return { ...state, constructorList: action.sortedIngredients };
     }
     case SEND_ORDER_REQUEST: {
       return { ...state, sendOrderRequest: true };
@@ -98,8 +120,8 @@ export const burgerReducer = (state = initialState, action) => {
       return {
         ...state,
         constructorList: [],
-        bun: null
-      }
+        bun: null,
+      };
     }
     default: {
       return state;
