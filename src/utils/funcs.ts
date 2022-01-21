@@ -1,4 +1,4 @@
-export function _checkResponse(res) {
+export function _checkResponse(res: Response) {
   if (res.ok) {
     return res.json()
   }
