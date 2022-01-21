@@ -1,4 +1,4 @@
-import { AppDispatch, AppThunk } from "../..";
+import { AppDispatch, AppThunk } from "../store/store";
 import { API_URL } from "../../utils/constants";
 import { _checkResponse } from "../../utils/funcs";
 import { TIngredient } from "../../utils/types";

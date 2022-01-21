@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import modalStyles from "./Modal.module.css"
 import ModalOverlay from "../modal-overlay/ModalOverlay";
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from "prop-types"
 
 interface IModal {
   children: ReactNode,
@@ -43,11 +42,6 @@ export const Modal: FC<IModal> = ({ children, handleClose }) => {
     ),
     document.getElementById('modal-root')!,
   )
-}
-
-Modal.propTypes = {
-  children: PropTypes.node.isRequired,
-  handleClose: PropTypes.func.isRequired
 }
 
 export default Modal

@@ -75,7 +75,7 @@ const BurgerIngredients = () => {
           <div ref={bunTab} className={` ${ingredientsStyles.typeSection}`}>
             <h3 className='pb-6 text text_type_main-medium'>Булки</h3>
             <div className={ingredientsStyles.gridContainer}>
-              {buns.map((item) => (
+              {buns.map((item: TIngredient) => (
                 <Ingredient key={item._id} ingredient={item} handleClick={handleOpen} />
               ))}
             </div>
@@ -83,7 +83,7 @@ const BurgerIngredients = () => {
           <div ref={sauceTab} className={`pt-10 ${ingredientsStyles.typeSection}`}>
             <h3 className='pb-6 text text_type_main-medium'>Соусы</h3>
             <div className={ingredientsStyles.gridContainer}>
-              {sauces.map((item) => (
+              {sauces.map((item: TIngredient) => (
                 <Ingredient key={item._id} ingredient={item} handleClick={handleOpen} />
               ))}
             </div>
@@ -91,7 +91,7 @@ const BurgerIngredients = () => {
           <div ref={mainTab} className={`pt-10 ${ingredientsStyles.typeSection}`}>
             <h3 className='pb-6 text text_type_main-medium'>Начинки</h3>
             <div className={ingredientsStyles.gridContainer}>
-              {main.map((item) => (
+              {main.map((item: TIngredient) => (
                 <Ingredient key={item._id} ingredient={item} handleClick={handleOpen} />
               ))}
             </div>
