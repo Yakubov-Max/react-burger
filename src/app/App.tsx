@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import AppHeader from '../app-header/AppHeader';
-import BurgerConstructor from "../burger-constructor/BurgerConstructor";
-import BurgerIngridients from '../burger-ingredients/BurgerIngredients';
 import appStyles from './App.module.css'
 import { useDispatch, useSelector } from '../utils/hooks';
 import { getIngredients } from '../services/actions/burger';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import MainPage from '../pages/MainPage';
+import LoginPage from '../pages/login/LoginPage'
+import RegisterPage from '../pages/register/RegisterPage';
+import ForgotPasswordPage from '../pages/forgot-password/ForgotPasswordPage'
+import ResetPasswordPage from '../pages/reset-password/ResetPasswordPage';
+import ProfilePage from '../pages/profile-page/ProfilePage';
 
 function App() {
   const dispatch = useDispatch()
@@ -18,17 +21,35 @@ function App() {
 
   return (
     <div>
-      <AppHeader />
-      <main className={appStyles.container}>
-        {
-          ingredients && (
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngridients />
-              <BurgerConstructor />
-            </DndProvider>
-          )
-        }
-      </main>
+      <Router>
+        <AppHeader />
+        <main className={appStyles.container}>
+          <Switch>
+            <Route path='/' exact={true}>
+              {
+                ingredients && (
+                  <MainPage />
+                )
+              }
+            </Route>
+            <Route path='/login' exact={true}>
+              <LoginPage />
+            </Route>
+            <Route path='/register' exact={true}>
+              <RegisterPage />
+            </Route>
+            <Route path='/forgot-password' exact={true}>
+              <ForgotPasswordPage />
+            </Route>
+            <Route path='/reset-password' exact={true}>
+              <ResetPasswordPage />
+            </Route>
+            <Route path='/profile' exact={true}>
+              <ProfilePage />
+            </Route>
+          </Switch>
+        </main>
+      </Router>
     </div>
   );
 }
