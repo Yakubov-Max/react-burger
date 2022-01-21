@@ -7,9 +7,12 @@ interface IModalOverlayInterface {
   handleClose: Function
 }
 
+
+
 const ModalOverlay: FC<IModalOverlayInterface> = ({ children, handleClose }) => {
+  
   return (
-    <div className={modalStyles.overlay} onClick={() => handleClose}>
+    <div className={modalStyles.overlay} onClick={() => handleClose()}>
     {children}
   </div>
   )

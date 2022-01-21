@@ -29,16 +29,12 @@ export const Modal: FC<IModal> = ({ children, handleClose }) => {
       document.removeEventListener('keyup', handleEscKey)
     }
   }, [handleClose])
-
-  const closeModal = () => {
-    handleClose()
-  }
   
   return ReactDOM.createPortal(
     (
-      <ModalOverlay handleClose={() => handleClose}>
+      <ModalOverlay handleClose={handleClose}>
         <div className={modalStyles.container} onClick={stopPropagation}>
-          <button type='button' className={`${modalStyles.closeButton}`} onClick={closeModal}>
+          <button type='button' className={`${modalStyles.closeButton}`} onClick={() => handleClose()}>
             <CloseIcon type="primary" />
           </button>
           {children}
