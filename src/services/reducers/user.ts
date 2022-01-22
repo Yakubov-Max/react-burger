@@ -3,6 +3,9 @@ import {
   REGISTER_FAILED,
   REGISTER_SUCCESS,
   REGISTER_REQUEST,
+  LOGIN_REQUEST,
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -14,7 +17,9 @@ type TInitialUserState = {
   registerFailed: boolean;
   registerSuccess: boolean;
 
-  loggedIn: boolean;
+  loginRequest: boolean;
+  loginFailed: boolean;
+  loginSuccess: boolean;
 };
 
 const initialUserState: TInitialUserState = {
@@ -26,7 +31,9 @@ const initialUserState: TInitialUserState = {
   registerFailed: false,
   registerSuccess: false,
 
-  loggedIn: false
+  loginRequest: false,
+  loginFailed: false,
+  loginSuccess: false,
 };
 
 export const userReducer = (
@@ -47,7 +54,21 @@ export const userReducer = (
         registerRequest: false,
         userEmail: action.user,
         userName: action.name,
-        loggedIn: true
+      };
+    }
+    case LOGIN_REQUEST: {
+      return { ...state, loginRequest: true };
+    }
+    case LOGIN_FAILED: {
+      return { ...state, loginFailed: true, loginRequest: false };
+    }
+    case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        loginFailed: false,
+        loginRequest: false,
+        userEmail: action.user,
+        userName: action.name,
       };
     }
     default: {

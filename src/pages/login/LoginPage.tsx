@@ -2,10 +2,13 @@ import React from 'react';
 import styles from './loginPage.module.css'
 import { Link } from 'react-router-dom'
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { login } from '../../services/actions/user';
+import { useDispatch } from '../../utils/hooks';
 
 function LoginPage() {
   const [emailValue, setEmailValue] = React.useState('')
   const [passwordValue, setPasswordValue] = React.useState('')
+  const dispatch = useDispatch()
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -13,6 +16,11 @@ function LoginPage() {
 
   const onPasswordChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setPasswordValue(e.target.value)
+  }
+
+  const handleLogin = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault()
+    dispatch(login({email: emailValue, password: passwordValue}))
   }
 
   return (
@@ -25,7 +33,7 @@ function LoginPage() {
         <div className={`${styles.inputContainer} pt-6 pb-6 `}>
           <PasswordInput onChange={onPasswordChange} value={passwordValue} name={'password'} />
         </div>
-        <Button type="primary" size='large'>Войти</Button>
+        <Button type="primary" size='large' onClick={(e) => handleLogin(e)}>Войти</Button>
       </form>
       <div className={`${styles.linkContainer} text_type_main-small`}>
         <p className='text text_color_inactive'>Вы — новый пользователь?</p>
