@@ -7,6 +7,7 @@ import {
 } from "redux";
 import thunk, { ThunkAction } from "redux-thunk";
 import { TActions } from "../actions/burger";
+import { TUserActions } from "../actions/user";
 import { rootReducer } from "../reducers";
 
 export const composeEnhancers =
@@ -14,7 +15,8 @@ export const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-type TApplicationActions = TActions;
+type TApplicationActions = TActions | TUserActions;
+
 export const store = createStore(rootReducer, enhancer);
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -32,10 +32,10 @@ function ProfilePage() {
       </div>
       <form action="" className={`${styles.formContainer}`}>
         <div className={`${styles.inputContainer}`}>
-          < Input icon='EditIcon' type='text' onChange={onFirstnameChange} value={firstName} placeholder='Имя' name={'firstname'} />
+          < Input icon='EditIcon' type='text' onChange={onFirstnameChange} placeholder='Имя' value={firstName} name={'firstname'} />
         </div>
         <div className={`${styles.inputContainer} pt-6`}>
-          < EmailInput onChange={onEmailChange} value={emailValue} name={'E-mail'} />
+          < EmailInput onChange={onEmailChange}  value={emailValue} name={'E-mail'} />
         </div>
         <div className={`${styles.inputContainer} pt-6 pb-6 `}>
           < Input icon='EditIcon' placeholder='Пароль' type='password' onChange={onPasswordChange} value={passwordValue} name={'password'} />
