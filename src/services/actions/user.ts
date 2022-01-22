@@ -1,5 +1,5 @@
 import { AppDispatch, AppThunk } from "../store/store";
-import { AUTH_URL } from "../../utils/constants";
+import { API_URL, AUTH_URL } from "../../utils/constants";
 import { setCookie, _checkResponse } from "../../utils/funcs";
 
 export const REGISTER_REQUEST: "REGISTER_REQUEST" = "REGISTER_REQUEST";
@@ -9,6 +9,25 @@ export const REGISTER_SUCCESS: "REGISTER_SUCCESS" = "REGISTER_SUCCESS";
 export const LOGIN_REQUEST: "LOGIN_REQUEST" = "LOGIN_REQUEST";
 export const LOGIN_FAILED: "LOGIN_FAILED" = "LOGIN_FAILED";
 export const LOGIN_SUCCESS: "LOGIN_SUCCESS" = "LOGIN_SUCCESS";
+
+export const PASSWORD_RESET_REQUEST: "PASSWORD_RESET_REQUEST" =
+  "PASSWORD_RESET_REQUEST";
+export const PASSWORD_RESET_FAILED: "PASSWORD_RESET_FAILED" =
+  "PASSWORD_RESET_FAILED";
+export const PASSWORD_RESET_SUCCESS: "PASSWORD_RESET_SUCCESS" =
+  "PASSWORD_RESET_SUCCESS";
+
+export interface IResetPasswordRequest {
+  readonly type: typeof PASSWORD_RESET_REQUEST;
+}
+
+export interface IResetPasswordFailed {
+  readonly type: typeof PASSWORD_RESET_FAILED;
+}
+
+export interface IResetPasswordSuccess {
+  readonly type: typeof PASSWORD_RESET_SUCCESS;
+}
 
 export interface ILoginRequest {
   readonly type: typeof LOGIN_REQUEST;
@@ -44,7 +63,40 @@ export type TUserActions =
   | IRegisterSuccess
   | ILoginRequest
   | ILoginFailed
-  | ILoginSuccess;
+  | ILoginSuccess
+  | IResetPasswordRequest
+  | IResetPasswordFailed
+  | IResetPasswordSuccess;
+
+export const resetPassword: AppThunk =
+  ({ email }) =>
+  (dispatch: AppDispatch) => {
+    dispatch({
+      type: PASSWORD_RESET_REQUEST,
+    });
+    sendPasswordResetData(email).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: PASSWORD_RESET_SUCCESS
+        })
+      } else {
+        dispatch({
+          type: PASSWORD_RESET_FAILED
+        })
+      }
+    });
+  };
+
+const sendPasswordResetData = async (email: string) => {
+  return await fetch(`${API_URL}/password-reset`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: email }),
+  }).then(_checkResponse);
+};
 
 export const login: AppThunk =
   ({ email, password }) =>

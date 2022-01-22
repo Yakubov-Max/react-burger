@@ -6,6 +6,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_FAILED,
   LOGIN_SUCCESS,
+  PASSWORD_RESET_SUCCESS,
+  PASSWORD_RESET_REQUEST,
+  PASSWORD_RESET_FAILED,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -20,6 +23,10 @@ type TInitialUserState = {
   loginRequest: boolean;
   loginFailed: boolean;
   loginSuccess: boolean;
+
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: boolean;
+  resetPasswordSuccess: boolean;
 };
 
 const initialUserState: TInitialUserState = {
@@ -34,6 +41,10 @@ const initialUserState: TInitialUserState = {
   loginRequest: false,
   loginFailed: false,
   loginSuccess: false,
+
+  resetPasswordRequest: false,
+  resetPasswordFailed: false,
+  resetPasswordSuccess: false,
 };
 
 export const userReducer = (
@@ -41,6 +52,15 @@ export const userReducer = (
   action: TUserActions
 ): TInitialUserState => {
   switch (action.type) {
+    case PASSWORD_RESET_REQUEST: {
+      return { ...state, resetPasswordRequest: true };
+    }
+    case PASSWORD_RESET_FAILED: {
+      return { ...state, resetPasswordFailed: true };
+    }
+    case PASSWORD_RESET_SUCCESS: {
+      return { ...state, resetPasswordSuccess: true };
+    }
     case REGISTER_REQUEST: {
       return { ...state, registerRequest: true };
     }

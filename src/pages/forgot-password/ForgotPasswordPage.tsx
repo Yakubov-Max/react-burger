@@ -1,13 +1,21 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { resetPassword } from '../../services/actions/user';
+import { useDispatch } from '../../utils/hooks';
 import styles from './forgotPasswordPage.module.css'
 
 function ForgotPasswordPage() {
   const [emailValue, setEmailValue] = React.useState('')
+  const dispatch = useDispatch()
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
+  }
+
+  const handlePasswordReset = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault()
+    dispatch(resetPassword({email: emailValue}))
   }
 
   return (
@@ -17,7 +25,7 @@ function ForgotPasswordPage() {
       <div className={`${styles.inputContainer} pt-6 pb-6`}>
         < EmailInput onChange={onEmailChange} value={emailValue} name={'E-mail'} />
       </div>
-      <Button type="primary" size='large'>Восстановить</Button>
+      <Button type="primary" size='large' onClick={(e) => handlePasswordReset(e)}>Восстановить</Button>
     </form>
     <div className={`${styles.linkContainer} pt-4 text_type_main-small`}>
       <p className='text text_color_inactive'>Вспомнили пароль?</p>
