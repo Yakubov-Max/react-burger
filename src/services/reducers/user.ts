@@ -18,6 +18,9 @@ import {
   GET_USER_DATA_SUCCESS,
   GET_USER_DATA_REQUEST,
   GET_USER_DATA_FAILED,
+  LOGOUT_REQUEST,
+  LOGOUT_FAILED,
+  LOGOUT_SUCCESS,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -33,21 +36,25 @@ type TInitialUserState = {
   loginFailed: boolean;
   loginSuccess: boolean;
 
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+  logoutSuccess: boolean;
+
   resetPasswordRequest: boolean;
   resetPasswordFailed: boolean;
   resetPasswordSuccess: boolean;
 
-  resetPasswordCodeRequest: boolean,
-  resetPasswordCodeFailed: boolean,
-  resetPasswordCodeSuccess: boolean,
+  resetPasswordCodeRequest: boolean;
+  resetPasswordCodeFailed: boolean;
+  resetPasswordCodeSuccess: boolean;
 
-  refreshTokenRequest: boolean,
-  refreshTokenFailed: boolean,
-  refreshTokenSuccess: boolean,
+  refreshTokenRequest: boolean;
+  refreshTokenFailed: boolean;
+  refreshTokenSuccess: boolean;
 
-  getUserDataRequest: boolean,
-  getUserDataFailed: boolean,
-  getUserDataSuccess: boolean,
+  getUserDataRequest: boolean;
+  getUserDataFailed: boolean;
+  getUserDataSuccess: boolean;
 };
 
 const initialUserState: TInitialUserState = {
@@ -62,6 +69,10 @@ const initialUserState: TInitialUserState = {
   loginRequest: false,
   loginFailed: false,
   loginSuccess: false,
+
+  logoutRequest: false,
+  logoutFailed: false,
+  logoutSuccess: false,
 
   resetPasswordRequest: false,
   resetPasswordFailed: false,
@@ -85,6 +96,20 @@ export const userReducer = (
   action: TUserActions
 ): TInitialUserState => {
   switch (action.type) {
+    case LOGOUT_REQUEST: {
+      return { ...state, logoutRequest: true };
+    }
+    case LOGOUT_FAILED: {
+      return { ...state, logoutFailed: true, logoutRequest: false };
+    }
+    case LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        logoutSuccess: true,
+        logoutRequest: false,
+        logoutFailed: false,
+      };
+    }
     case GET_USER_DATA_REQUEST: {
       return { ...state, getUserDataRequest: true };
     }
@@ -105,28 +130,51 @@ export const userReducer = (
       return { ...state, refreshTokenRequest: true };
     }
     case REFRESH_TOKEN_FALIED: {
-      return { ...state, refreshTokenFailed: true };
+      return { ...state, refreshTokenFailed: true, refreshTokenRequest: false };
     }
     case REFRESH_TOKEN_SUCCESS: {
-      return { ...state, refreshTokenSuccess: true };
+      return {
+        ...state,
+        refreshTokenSuccess: true,
+        refreshTokenRequest: false,
+        refreshTokenFailed: false,
+      };
     }
     case PASSWORD_RESET_CODE_REQUEST: {
       return { ...state, resetPasswordCodeRequest: true };
     }
     case PASSWORD_RESET_CODE_FAILED: {
-      return { ...state, resetPasswordCodeFailed: true };
+      return {
+        ...state,
+        resetPasswordCodeFailed: true,
+        resetPasswordCodeRequest: false,
+      };
     }
     case PASSWORD_RESET_CODE_SUCCESS: {
-      return { ...state, resetPasswordCodeSuccess: true };
+      return {
+        ...state,
+        resetPasswordCodeSuccess: true,
+        resetPasswordCodeFailed: false,
+        resetPasswordCodeRequest: false,
+      };
     }
     case PASSWORD_RESET_REQUEST: {
       return { ...state, resetPasswordRequest: true };
     }
     case PASSWORD_RESET_FAILED: {
-      return { ...state, resetPasswordFailed: true };
+      return {
+        ...state,
+        resetPasswordFailed: true,
+        resetPasswordRequest: false,
+      };
     }
     case PASSWORD_RESET_SUCCESS: {
-      return { ...state, resetPasswordSuccess: true };
+      return {
+        ...state,
+        resetPasswordSuccess: true,
+        resetPasswordFailed: false,
+        resetPasswordRequest: false,
+      };
     }
     case REGISTER_REQUEST: {
       return { ...state, registerRequest: true };
@@ -139,6 +187,7 @@ export const userReducer = (
         ...state,
         registerFailed: false,
         registerRequest: false,
+        registerSuccess: true,
         userEmail: action.email,
         userName: action.name,
       };
@@ -154,6 +203,7 @@ export const userReducer = (
         ...state,
         loginFailed: false,
         loginRequest: false,
+        loginSuccess: true,
         userEmail: action.email,
         userName: action.name,
       };

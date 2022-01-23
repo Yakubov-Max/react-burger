@@ -1,7 +1,6 @@
 import { AppDispatch, AppThunk } from "../store/store";
 import { API_URL, AUTH_URL } from "../../utils/constants";
 import { setCookie, _checkResponse } from "../../utils/funcs";
-import { resolveSoa } from "dns";
 
 export const REGISTER_REQUEST: "REGISTER_REQUEST" = "REGISTER_REQUEST";
 export const REGISTER_FAILED: "REGISTER_FAILED" = "REGISTER_FAILED";
@@ -10,6 +9,10 @@ export const REGISTER_SUCCESS: "REGISTER_SUCCESS" = "REGISTER_SUCCESS";
 export const LOGIN_REQUEST: "LOGIN_REQUEST" = "LOGIN_REQUEST";
 export const LOGIN_FAILED: "LOGIN_FAILED" = "LOGIN_FAILED";
 export const LOGIN_SUCCESS: "LOGIN_SUCCESS" = "LOGIN_SUCCESS";
+
+export const LOGOUT_REQUEST: "LOGOUT_REQUEST" = "LOGOUT_REQUEST";
+export const LOGOUT_FAILED: "LOGOUT_FAILED" = "LOGOUT_FAILED";
+export const LOGOUT_SUCCESS: "LOGOUT_SUCCESS" = "LOGOUT_SUCCESS";
 
 export const GET_USER_DATA_REQUEST: "GET_USER_DATA_REQUEST" =
   "GET_USER_DATA_REQUEST";
@@ -38,6 +41,18 @@ export const REFRESH_TOKEN_FALIED: "REFRESH_TOKEN_FALIED" =
   "REFRESH_TOKEN_FALIED";
 export const REFRESH_TOKEN_SUCCESS: "REFRESH_TOKEN_SUCCESS" =
   "REFRESH_TOKEN_SUCCESS";
+
+export interface ILogoutRequest {
+  readonly type: typeof LOGOUT_REQUEST;
+}
+
+export interface ILogoutFailed {
+  readonly type: typeof LOGOUT_FAILED;
+}
+
+export interface ILogoutSuccess {
+  readonly type: typeof LOGOUT_SUCCESS;
+}
 
 export interface IGetUserDataRequest {
   readonly type: typeof GET_USER_DATA_REQUEST;
@@ -135,7 +150,38 @@ export type TUserActions =
   | IRefreshTokenSuccess
   | IGetUserDataRequest
   | IGetUserDataFailed
-  | IGetUserDataSuccess;
+  | IGetUserDataSuccess
+  | ILogoutRequest
+  | ILogoutFailed
+  | ILogoutSuccess;
+
+export const logout: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
+  dispatch({
+    type: LOGOUT_REQUEST,
+  });
+  sendLogoutRequest(refreshToken).then((res) => {
+    if (res && res.success) {
+      dispatch({
+        type: LOGOUT_SUCCESS
+      })
+    } else {
+      dispatch({
+        type: LOGOUT_FAILED
+      })
+    }
+  })
+};
+
+const sendLogoutRequest = async (refreshToken: string) => {
+  return await fetch(`${AUTH_URL}/logout`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token: refreshToken }),
+  }).then(_checkResponse);
+}
 
 export const getUserData: AppThunk =
   (accessToken) => (dispatch: AppDispatch) => {
@@ -163,7 +209,7 @@ const sendGetUserData = async (accessToken: string) => {
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
     },
   }).then(_checkResponse);
 };
