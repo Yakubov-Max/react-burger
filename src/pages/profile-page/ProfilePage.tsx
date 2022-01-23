@@ -1,12 +1,16 @@
 import { EmailInput, Input, } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { getUserData } from '../../services/actions/user';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './profilePage.module.css'
 
 function ProfilePage() {
   const [emailValue, setEmailValue] = React.useState('')
   const [firstName, setFirstNameValue] = React.useState('')
   const [passwordValue, setPasswordValue] = React.useState('')
+  const dispatch = useDispatch()
+  const userState = useSelector(state => state.user)
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -19,6 +23,15 @@ function ProfilePage() {
   const onFirstnameChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setFirstNameValue(e.target.value)
   }
+
+  useEffect(() => {
+    const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if (accessToken) {
+      dispatch(getUserData(accessToken))
+      setEmailValue(userState.userEmail)
+      setFirstNameValue(userState.userName)
+    }
+  }, [dispatch, userState.userEmail, userState.userName])
 
   return (
     <div className={`${styles.container}`}>

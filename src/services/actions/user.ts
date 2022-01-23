@@ -1,6 +1,7 @@
 import { AppDispatch, AppThunk } from "../store/store";
 import { API_URL, AUTH_URL } from "../../utils/constants";
 import { setCookie, _checkResponse } from "../../utils/funcs";
+import { resolveSoa } from "dns";
 
 export const REGISTER_REQUEST: "REGISTER_REQUEST" = "REGISTER_REQUEST";
 export const REGISTER_FAILED: "REGISTER_FAILED" = "REGISTER_FAILED";
@@ -9,6 +10,13 @@ export const REGISTER_SUCCESS: "REGISTER_SUCCESS" = "REGISTER_SUCCESS";
 export const LOGIN_REQUEST: "LOGIN_REQUEST" = "LOGIN_REQUEST";
 export const LOGIN_FAILED: "LOGIN_FAILED" = "LOGIN_FAILED";
 export const LOGIN_SUCCESS: "LOGIN_SUCCESS" = "LOGIN_SUCCESS";
+
+export const GET_USER_DATA_REQUEST: "GET_USER_DATA_REQUEST" =
+  "GET_USER_DATA_REQUEST";
+export const GET_USER_DATA_FAILED: "GET_USER_DATA_FAILED" =
+  "GET_USER_DATA_FAILED";
+export const GET_USER_DATA_SUCCESS: "GET_USER_DATA_SUCCESS" =
+  "GET_USER_DATA_SUCCESS";
 
 export const PASSWORD_RESET_REQUEST: "PASSWORD_RESET_REQUEST" =
   "PASSWORD_RESET_REQUEST";
@@ -30,6 +38,20 @@ export const REFRESH_TOKEN_FALIED: "REFRESH_TOKEN_FALIED" =
   "REFRESH_TOKEN_FALIED";
 export const REFRESH_TOKEN_SUCCESS: "REFRESH_TOKEN_SUCCESS" =
   "REFRESH_TOKEN_SUCCESS";
+
+export interface IGetUserDataRequest {
+  readonly type: typeof GET_USER_DATA_REQUEST;
+}
+
+export interface IGetUserDataFailed {
+  readonly type: typeof GET_USER_DATA_FAILED;
+}
+
+export interface IGetUserDataSuccess {
+  email: string;
+  name: string;
+  readonly type: typeof GET_USER_DATA_SUCCESS;
+}
 
 export interface IRefreshTokenRequest {
   readonly type: typeof REFRESH_TOKEN_REQUEST;
@@ -77,7 +99,7 @@ export interface ILoginFailed {
 
 export interface ILoginSuccess {
   name: string;
-  user: string;
+  email: string;
   readonly type: typeof LOGIN_SUCCESS;
 }
 
@@ -91,7 +113,7 @@ export interface IRegisterFailed {
 
 export interface IRegisterSuccess {
   name: string;
-  user: string;
+  email: string;
   readonly type: typeof REGISTER_SUCCESS;
 }
 
@@ -110,7 +132,41 @@ export type TUserActions =
   | IResetPasswordCodeSuccess
   | IRefreshTokenRequest
   | IRefreshTokenFailed
-  | IRefreshTokenSuccess;
+  | IRefreshTokenSuccess
+  | IGetUserDataRequest
+  | IGetUserDataFailed
+  | IGetUserDataSuccess;
+
+export const getUserData: AppThunk =
+  (accessToken) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: GET_USER_DATA_REQUEST,
+    });
+    sendGetUserData(accessToken).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: GET_USER_DATA_SUCCESS,
+          name: res.user.name,
+          email: res.user.email,
+        });
+      } else {
+        dispatch({
+          type: GET_USER_DATA_FAILED,
+        });
+      }
+    });
+  };
+
+const sendGetUserData = async (accessToken: string) => {
+  return await fetch(`${AUTH_URL}/user`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`
+    },
+  }).then(_checkResponse);
+};
 
 export const refreshAccessToken: AppThunk =
   (refreshToken) => (dispatch: AppDispatch) => {
@@ -122,7 +178,7 @@ export const refreshAccessToken: AppThunk =
         dispatch({
           type: REFRESH_TOKEN_SUCCESS,
         });
-        
+
         let accessToken;
 
         if (res.accessToken.indexOf("Bearer") === 0) {
@@ -223,7 +279,7 @@ export const login: AppThunk =
       if (res && res.success) {
         dispatch({
           type: LOGIN_SUCCESS,
-          user: res.user.email,
+          email: res.user.email,
           name: res.user.name,
         });
 
@@ -268,7 +324,7 @@ export const register: AppThunk =
         if (res && res.success) {
           dispatch({
             type: REGISTER_SUCCESS,
-            user: res.user.email,
+            email: res.user.email,
             name: res.user.name,
             loggedIn: true,
           });

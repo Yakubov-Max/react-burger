@@ -15,6 +15,9 @@ import {
   REFRESH_TOKEN_REQUEST,
   REFRESH_TOKEN_FALIED,
   REFRESH_TOKEN_SUCCESS,
+  GET_USER_DATA_SUCCESS,
+  GET_USER_DATA_REQUEST,
+  GET_USER_DATA_FAILED,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -41,6 +44,10 @@ type TInitialUserState = {
   refreshTokenRequest: boolean,
   refreshTokenFailed: boolean,
   refreshTokenSuccess: boolean,
+
+  getUserDataRequest: boolean,
+  getUserDataFailed: boolean,
+  getUserDataSuccess: boolean,
 };
 
 const initialUserState: TInitialUserState = {
@@ -67,6 +74,10 @@ const initialUserState: TInitialUserState = {
   refreshTokenRequest: false,
   refreshTokenFailed: false,
   refreshTokenSuccess: false,
+
+  getUserDataRequest: false,
+  getUserDataFailed: false,
+  getUserDataSuccess: false,
 };
 
 export const userReducer = (
@@ -74,6 +85,22 @@ export const userReducer = (
   action: TUserActions
 ): TInitialUserState => {
   switch (action.type) {
+    case GET_USER_DATA_REQUEST: {
+      return { ...state, getUserDataRequest: true };
+    }
+    case GET_USER_DATA_FAILED: {
+      return { ...state, getUserDataFailed: true, getUserDataRequest: false };
+    }
+    case GET_USER_DATA_SUCCESS: {
+      return {
+        ...state,
+        getUserDataRequest: false,
+        getUserDataFailed: false,
+        getUserDataSuccess: true,
+        userEmail: action.email,
+        userName: action.name,
+      };
+    }
     case REFRESH_TOKEN_REQUEST: {
       return { ...state, refreshTokenRequest: true };
     }
@@ -112,7 +139,7 @@ export const userReducer = (
         ...state,
         registerFailed: false,
         registerRequest: false,
-        userEmail: action.user,
+        userEmail: action.email,
         userName: action.name,
       };
     }
@@ -127,7 +154,7 @@ export const userReducer = (
         ...state,
         loginFailed: false,
         loginRequest: false,
-        userEmail: action.user,
+        userEmail: action.email,
         userName: action.name,
       };
     }
