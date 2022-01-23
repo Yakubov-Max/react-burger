@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './loginPage.module.css'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { login } from '../../services/actions/user';
 import { useDispatch } from '../../utils/hooks';
@@ -9,6 +9,7 @@ function LoginPage() {
   const [emailValue, setEmailValue] = React.useState('')
   const [passwordValue, setPasswordValue] = React.useState('')
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -21,6 +22,7 @@ function LoginPage() {
   const handleLogin = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
     dispatch(login({email: emailValue, password: passwordValue}))
+    history.push('/')
   }
 
   return (

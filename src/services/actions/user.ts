@@ -24,6 +24,25 @@ export const PASSWORD_RESET_CODE_FAILED: "PASSWORD_RESET_CODE_FAILED" =
 export const PASSWORD_RESET_CODE_SUCCESS: "PASSWORD_RESET_CODE_SUCCESS" =
   "PASSWORD_RESET_CODE_SUCCESS";
 
+export const REFRESH_TOKEN_REQUEST: "REFRESH_TOKEN_REQUEST" =
+  "REFRESH_TOKEN_REQUEST";
+export const REFRESH_TOKEN_FALIED: "REFRESH_TOKEN_FALIED" =
+  "REFRESH_TOKEN_FALIED";
+export const REFRESH_TOKEN_SUCCESS: "REFRESH_TOKEN_SUCCESS" =
+  "REFRESH_TOKEN_SUCCESS";
+
+export interface IRefreshTokenRequest {
+  readonly type: typeof REFRESH_TOKEN_REQUEST;
+}
+
+export interface IRefreshTokenFailed {
+  readonly type: typeof REFRESH_TOKEN_FALIED;
+}
+
+export interface IRefreshTokenSuccess {
+  readonly type: typeof REFRESH_TOKEN_SUCCESS;
+}
+
 export interface IResetPasswordCodeRequest {
   readonly type: typeof PASSWORD_RESET_CODE_REQUEST;
 }
@@ -88,7 +107,51 @@ export type TUserActions =
   | IResetPasswordSuccess
   | IResetPasswordCodeRequest
   | IResetPasswordCodeFailed
-  | IResetPasswordCodeSuccess;
+  | IResetPasswordCodeSuccess
+  | IRefreshTokenRequest
+  | IRefreshTokenFailed
+  | IRefreshTokenSuccess;
+
+export const refreshAccessToken: AppThunk =
+  (refreshToken) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: REFRESH_TOKEN_REQUEST,
+    });
+    sendRefreshToken(refreshToken).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: REFRESH_TOKEN_SUCCESS,
+        });
+        
+        let accessToken;
+
+        if (res.accessToken.indexOf("Bearer") === 0) {
+          accessToken = res.accessToken.split("Bearer ")[1];
+        }
+
+        let refreshToken = res.refreshToken;
+        if (accessToken && refreshToken) {
+          setCookie("accessToken", accessToken, { expires: 1200 });
+          setCookie("refreshToken", refreshToken);
+        }
+      } else {
+        dispatch({
+          type: REFRESH_TOKEN_FALIED,
+        });
+      }
+    });
+  };
+
+const sendRefreshToken = async (refreshToken: string) => {
+  return await fetch(`${AUTH_URL}/token`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token: refreshToken }),
+  }).then(_checkResponse);
+};
 
 export const resetPasswordCode: AppThunk =
   ({ code, password }) =>
@@ -99,26 +162,26 @@ export const resetPasswordCode: AppThunk =
     sendResetPasswordCode(code, password).then((res) => {
       if (res && res.success) {
         dispatch({
-          type: PASSWORD_RESET_CODE_SUCCESS
-        })
+          type: PASSWORD_RESET_CODE_SUCCESS,
+        });
       } else {
         dispatch({
-          type: PASSWORD_RESET_CODE_FAILED
-        })
+          type: PASSWORD_RESET_CODE_FAILED,
+        });
       }
-    })
+    });
   };
 
-  const sendResetPasswordCode = async (code: string, password: string) => {
-    return await fetch(`${API_URL}/password-reset/reset`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ password: password, token: code }),
-    }).then(_checkResponse);
-  };
+const sendResetPasswordCode = async (code: string, password: string) => {
+  return await fetch(`${API_URL}/password-reset/reset`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: password, token: code }),
+  }).then(_checkResponse);
+};
 
 export const resetPassword: AppThunk =
   ({ email }) =>
@@ -172,7 +235,7 @@ export const login: AppThunk =
 
         let refreshToken = res.refreshToken;
         if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 300 });
+          setCookie("accessToken", accessToken, { expires: 1200 });
           setCookie("refreshToken", refreshToken);
         }
       } else {

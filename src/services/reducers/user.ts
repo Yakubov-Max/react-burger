@@ -12,6 +12,9 @@ import {
   PASSWORD_RESET_CODE_REQUEST,
   PASSWORD_RESET_CODE_FAILED,
   PASSWORD_RESET_CODE_SUCCESS,
+  REFRESH_TOKEN_REQUEST,
+  REFRESH_TOKEN_FALIED,
+  REFRESH_TOKEN_SUCCESS,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -34,6 +37,10 @@ type TInitialUserState = {
   resetPasswordCodeRequest: boolean,
   resetPasswordCodeFailed: boolean,
   resetPasswordCodeSuccess: boolean,
+
+  refreshTokenRequest: boolean,
+  refreshTokenFailed: boolean,
+  refreshTokenSuccess: boolean,
 };
 
 const initialUserState: TInitialUserState = {
@@ -56,6 +63,10 @@ const initialUserState: TInitialUserState = {
   resetPasswordCodeRequest: false,
   resetPasswordCodeFailed: false,
   resetPasswordCodeSuccess: false,
+
+  refreshTokenRequest: false,
+  refreshTokenFailed: false,
+  refreshTokenSuccess: false,
 };
 
 export const userReducer = (
@@ -63,6 +74,15 @@ export const userReducer = (
   action: TUserActions
 ): TInitialUserState => {
   switch (action.type) {
+    case REFRESH_TOKEN_REQUEST: {
+      return { ...state, refreshTokenRequest: true };
+    }
+    case REFRESH_TOKEN_FALIED: {
+      return { ...state, refreshTokenFailed: true };
+    }
+    case REFRESH_TOKEN_SUCCESS: {
+      return { ...state, refreshTokenSuccess: true };
+    }
     case PASSWORD_RESET_CODE_REQUEST: {
       return { ...state, resetPasswordCodeRequest: true };
     }
