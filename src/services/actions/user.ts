@@ -17,6 +17,25 @@ export const PASSWORD_RESET_FAILED: "PASSWORD_RESET_FAILED" =
 export const PASSWORD_RESET_SUCCESS: "PASSWORD_RESET_SUCCESS" =
   "PASSWORD_RESET_SUCCESS";
 
+export const PASSWORD_RESET_CODE_REQUEST: "PASSWORD_RESET_CODE_REQUEST" =
+  "PASSWORD_RESET_CODE_REQUEST";
+export const PASSWORD_RESET_CODE_FAILED: "PASSWORD_RESET_CODE_FAILED" =
+  "PASSWORD_RESET_CODE_FAILED";
+export const PASSWORD_RESET_CODE_SUCCESS: "PASSWORD_RESET_CODE_SUCCESS" =
+  "PASSWORD_RESET_CODE_SUCCESS";
+
+export interface IResetPasswordCodeRequest {
+  readonly type: typeof PASSWORD_RESET_CODE_REQUEST;
+}
+
+export interface IResetPasswordCodeFailed {
+  readonly type: typeof PASSWORD_RESET_CODE_FAILED;
+}
+
+export interface IResetPasswordCodeSuccess {
+  readonly type: typeof PASSWORD_RESET_CODE_SUCCESS;
+}
+
 export interface IResetPasswordRequest {
   readonly type: typeof PASSWORD_RESET_REQUEST;
 }
@@ -66,7 +85,40 @@ export type TUserActions =
   | ILoginSuccess
   | IResetPasswordRequest
   | IResetPasswordFailed
-  | IResetPasswordSuccess;
+  | IResetPasswordSuccess
+  | IResetPasswordCodeRequest
+  | IResetPasswordCodeFailed
+  | IResetPasswordCodeSuccess;
+
+export const resetPasswordCode: AppThunk =
+  ({ code, password }) =>
+  (dispatch: AppDispatch) => {
+    dispatch({
+      type: PASSWORD_RESET_CODE_REQUEST,
+    });
+    sendResetPasswordCode(code, password).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: PASSWORD_RESET_CODE_SUCCESS
+        })
+      } else {
+        dispatch({
+          type: PASSWORD_RESET_CODE_FAILED
+        })
+      }
+    })
+  };
+
+  const sendResetPasswordCode = async (code: string, password: string) => {
+    return await fetch(`${API_URL}/password-reset/reset`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password: password, token: code }),
+    }).then(_checkResponse);
+  };
 
 export const resetPassword: AppThunk =
   ({ email }) =>
@@ -77,12 +129,12 @@ export const resetPassword: AppThunk =
     sendPasswordResetData(email).then((res) => {
       if (res && res.success) {
         dispatch({
-          type: PASSWORD_RESET_SUCCESS
-        })
+          type: PASSWORD_RESET_SUCCESS,
+        });
       } else {
         dispatch({
-          type: PASSWORD_RESET_FAILED
-        })
+          type: PASSWORD_RESET_FAILED,
+        });
       }
     });
   };

@@ -1,6 +1,6 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { resetPassword } from '../../services/actions/user';
 import { useDispatch } from '../../utils/hooks';
 import styles from './forgotPasswordPage.module.css'
@@ -8,6 +8,7 @@ import styles from './forgotPasswordPage.module.css'
 function ForgotPasswordPage() {
   const [emailValue, setEmailValue] = React.useState('')
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -16,6 +17,7 @@ function ForgotPasswordPage() {
   const handlePasswordReset = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
     dispatch(resetPassword({email: emailValue}))
+    history.push('/reset-password')
   }
 
   return (
