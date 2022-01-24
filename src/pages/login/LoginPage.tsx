@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './loginPage.module.css'
 import { Link, useHistory } from 'react-router-dom'
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { login } from '../../services/actions/user';
-import { useDispatch } from '../../utils/hooks';
+import { useDispatch, useSelector } from '../../utils/hooks';
 
 function LoginPage() {
   const [emailValue, setEmailValue] = React.useState('')
   const [passwordValue, setPasswordValue] = React.useState('')
   const dispatch = useDispatch()
   const history = useHistory()
+  const userState = useSelector(state => state.user)
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -21,9 +22,15 @@ function LoginPage() {
 
   const handleLogin = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
-    dispatch(login({email: emailValue, password: passwordValue}))
-    history.push('/')
+    dispatch(login({ email: emailValue, password: passwordValue }))
   }
+
+  useEffect(() => {
+    if (userState.loginSuccess) {
+      userState.loginSuccess = false
+      history.push('/')
+    }
+  }, [userState, history])
 
   return (
     <div className={`${styles.container}`}>

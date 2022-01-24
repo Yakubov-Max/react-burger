@@ -1,8 +1,8 @@
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { register } from '../../services/actions/user';
-import { useDispatch } from '../../utils/hooks';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './registerPage.module.css'
 
 function RegisterPage() {
@@ -11,6 +11,7 @@ function RegisterPage() {
   const [passwordValue, setPasswordValue] = React.useState('')
   const dispatch = useDispatch()
   const history = useHistory()
+  const userState = useSelector(state => state.user)
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -27,9 +28,14 @@ function RegisterPage() {
   const handleRegister = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
     dispatch(register({ email: emailValue, name: firstName, password: passwordValue }))
-
-    history.push('/')
   }
+
+  useEffect(() => {
+    if (userState.registerSuccess) {
+      userState.registerSuccess = false
+      history.push('/')
+    }
+  }, [userState, history])
 
   return (
     <>

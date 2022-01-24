@@ -1,14 +1,15 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { resetPassword } from '../../services/actions/user';
-import { useDispatch } from '../../utils/hooks';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './forgotPasswordPage.module.css'
 
 function ForgotPasswordPage() {
   const [emailValue, setEmailValue] = React.useState('')
   const dispatch = useDispatch()
   const history = useHistory()
+  const userState = useSelector(state => state.user)
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -17,8 +18,15 @@ function ForgotPasswordPage() {
   const handlePasswordReset = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
     dispatch(resetPassword({email: emailValue}))
-    history.push('/reset-password')
+    
   }
+
+  useEffect(() => {
+     if (userState.resetPasswordSuccess) {
+      userState.resetPasswordSuccess = false
+      history.push('/reset-password')
+     }
+  }, [history, userState])
 
   return (
     <div className={`${styles.container}`}>
