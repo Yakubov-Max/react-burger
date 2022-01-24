@@ -1,6 +1,6 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { resetPasswordCode } from '../../services/actions/user';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './resetPasswordPage.module.css'
@@ -31,6 +31,10 @@ function ResetPasswordPage() {
       history.push('/')
     }
   }, [userState, history])
+
+  if (userState.userName) {
+    return <Redirect to="/" />
+  }
 
   return (
     <div className={`${styles.container}`}>

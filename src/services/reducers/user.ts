@@ -26,7 +26,6 @@ import {
 type TInitialUserState = {
   userEmail: string;
   userName: string;
-  userPassword: string;
 
   registerRequest: boolean;
   registerFailed: boolean;
@@ -60,7 +59,6 @@ type TInitialUserState = {
 const initialUserState: TInitialUserState = {
   userEmail: "",
   userName: "",
-  userPassword: "",
 
   registerRequest: false,
   registerFailed: false,
@@ -108,6 +106,8 @@ export const userReducer = (
         logoutSuccess: true,
         logoutRequest: false,
         logoutFailed: false,
+        userName: '',
+        userEmail: ''
       };
     }
     case GET_USER_DATA_REQUEST: {

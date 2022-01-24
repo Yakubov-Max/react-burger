@@ -1,6 +1,6 @@
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { register } from '../../services/actions/user';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './registerPage.module.css'
@@ -36,6 +36,10 @@ function RegisterPage() {
       history.push('/')
     }
   }, [userState, history])
+
+  if (userState.userName) {
+    return <Redirect to="/" />
+  }
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './loginPage.module.css'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { login } from '../../services/actions/user';
 import { useDispatch, useSelector } from '../../utils/hooks';
@@ -31,6 +31,10 @@ function LoginPage() {
       history.push('/')
     }
   }, [userState, history])
+
+  if (userState.userName) {
+    return <Redirect to="/" />
+  }
 
   return (
     <div className={`${styles.container}`}>
