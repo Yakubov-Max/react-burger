@@ -1,6 +1,6 @@
 import { EmailInput, Input, } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { getUserData, logout } from '../../services/actions/user';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './profilePage.module.css'
@@ -11,6 +11,7 @@ function ProfilePage() {
   const [passwordValue, setPasswordValue] = React.useState('')
   const dispatch = useDispatch()
   const userState = useSelector(state => state.user)
+  const history = useHistory()
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -33,12 +34,19 @@ function ProfilePage() {
     }
   }, [dispatch, userState.userEmail, userState.userName])
 
-  const handleLogout = () => {
+  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault()
     const refreshToken = document.cookie.replace(/(?:(?:^|.*;\s*)refreshToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
     if (refreshToken) {
       dispatch(logout(refreshToken))
     }
   }
+
+  useEffect(() => {
+    if (userState.logoutSuccess) {
+      history.push('/login')
+    }
+  })
 
   return (
     <div className={`${styles.container}`}>
@@ -46,7 +54,7 @@ function ProfilePage() {
         <ul className={`${styles.linkContainer}`}>
           <li><NavLink to={'/profile'} activeClassName='text_color_primary' className={`${styles.listItem} text text_type_main-medium text_color_inactive`}>Профиль</NavLink></li>
           <li><NavLink to={'/profile/orders'} activeClassName='text_color_primary' className={`${styles.listItem} text text_type_main-medium text_color_inactive`}>История заказов</NavLink></li>
-          <li><NavLink onClick={() => handleLogout()} to={'/login'} activeClassName='text_color_primary' className={`${styles.listItem} text text_type_main-medium text_color_inactive`}>Выход</NavLink></li>
+          <li><NavLink onClick={(e) => handleLogout(e)} to={'/login'} activeClassName='text_color_primary' className={`${styles.listItem} text text_type_main-medium text_color_inactive`}>Выход</NavLink></li>
         </ul>
         <p className='pt-20 text text_type_main-default text_color_inactive'> В этом разделе вы можете изменить свои персональные данные</p>
       </div>
