@@ -52,6 +52,9 @@ function App() {
           <Route path='/reset-password' exact={true}>
             <ResetPasswordPage />
           </Route>
+          <Route path='/orders' exact={true}>
+            <div>orders</div>
+          </Route>
           <ProtectedRoute>
             <ProfilePage />
           </ProtectedRoute>
