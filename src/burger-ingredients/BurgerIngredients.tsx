@@ -7,12 +7,14 @@ import IngredientDetails from "../ingredient-details/IngredientDetails";
 import { REMOVE_CURRENT_INGREDIENT, ADD_CURRENT_INGREDIENT } from "../services/actions/burger";
 import { TIngredient } from "../utils/types";
 import { useSelector, useDispatch } from '../utils/hooks'
+import { useHistory } from "react-router-dom";
 
 
 const BurgerIngredients = () => {
   const ingredients = useSelector(state => state.burger.ingredients)
   const dispatch = useDispatch()
   const [current, setCurrent] = useState('buns')
+  const history = useHistory()
 
   const bunTab = useRef<HTMLDivElement | null>(null);
   const sauceTab = useRef<HTMLDivElement | null>(null);
@@ -22,7 +24,7 @@ const BurgerIngredients = () => {
   const buns = ingredients.filter((ingredient: TIngredient) => ingredient.type === 'bun');
   const sauces = ingredients.filter((ingredient: TIngredient) => ingredient.type === 'sauce');
 
-  const handleScroll = (evt:any) => {
+  const handleScroll = (evt: any) => {
     const listTop = evt.target.getBoundingClientRect().top
 
 
@@ -45,6 +47,7 @@ const BurgerIngredients = () => {
     dispatch({
       type: REMOVE_CURRENT_INGREDIENT
     })
+    history.goBack()
   }
 
   const handleOpen = (item: TIngredient) => {
@@ -100,11 +103,12 @@ const BurgerIngredients = () => {
       </section>
       {
         currentModalIngredient &&
-        <Modal handleClose={handleClose}>
-          <IngredientDetails></IngredientDetails>
-        </Modal>
+        <>
+          <Modal handleClose={handleClose}>
+            <IngredientDetails></IngredientDetails>
+          </Modal>
+        </>
       }
-
     </>
   )
 }

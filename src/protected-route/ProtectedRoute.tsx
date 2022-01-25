@@ -14,7 +14,7 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({ children, ...rest }) => {
   return (
     <Route {...rest} render={() =>
       userState.userName ? (children) : (
-        <Redirect to='/login'/>
+        <Redirect to='/login' exact={true}/ >
       ) }/>
   );
 }
