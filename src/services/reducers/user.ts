@@ -21,6 +21,9 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_FAILED,
   LOGOUT_SUCCESS,
+  PATCH_USER_DATA_REQUEST,
+  PATCH_USER_DATA_FAILED,
+  PATCH_USER_DATA_SUCCESS,
 } from "../actions/user";
 
 type TInitialUserState = {
@@ -54,6 +57,10 @@ type TInitialUserState = {
   getUserDataRequest: boolean;
   getUserDataFailed: boolean;
   getUserDataSuccess: boolean;
+
+  patchUserDataRequest: boolean;
+  patchUserDataFailed: boolean;
+  patchUserDataSuccess: boolean;
 };
 
 const initialUserState: TInitialUserState = {
@@ -87,6 +94,10 @@ const initialUserState: TInitialUserState = {
   getUserDataRequest: false,
   getUserDataFailed: false,
   getUserDataSuccess: false,
+
+  patchUserDataRequest: false,
+  patchUserDataFailed: false,
+  patchUserDataSuccess: false,
 };
 
 export const userReducer = (
@@ -94,6 +105,22 @@ export const userReducer = (
   action: TUserActions
 ): TInitialUserState => {
   switch (action.type) {
+    case PATCH_USER_DATA_REQUEST: {
+      return { ...state, patchUserDataRequest: true };
+    }
+    case PATCH_USER_DATA_FAILED: {
+      return { ...state, patchUserDataFailed: true, patchUserDataRequest: false };
+    }
+    case PATCH_USER_DATA_SUCCESS: {
+      return {
+        ...state,
+        patchUserDataRequest: false,
+        patchUserDataFailed: false,
+        patchUserDataSuccess: true,
+        userEmail: action.email,
+        userName: action.name,
+      };
+    }
     case LOGOUT_REQUEST: {
       return { ...state, logoutRequest: true };
     }

@@ -1,7 +1,7 @@
-import { EmailInput, Input, } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-import { getUserData, logout } from '../../services/actions/user';
+import { getUserData, logout, updateUserInfo } from '../../services/actions/user';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './profilePage.module.css'
 
@@ -12,6 +12,22 @@ function ProfilePage() {
   const dispatch = useDispatch()
   const userState = useSelector(state => state.user)
   const history = useHistory()
+
+  useEffect(() => {
+    if (userState.logoutSuccess) {
+      history.push('/login')
+    }
+  })
+
+  useEffect(() => {
+    const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    if (accessToken) {
+      dispatch(getUserData(accessToken))
+      setEmailValue(userState.userEmail)
+      setFirstNameValue(userState.userName)
+    }
+  }, [dispatch, userState.userEmail, userState.userName])
+
 
   const onEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmailValue(e.target.value)
@@ -25,15 +41,6 @@ function ProfilePage() {
     setFirstNameValue(e.target.value)
   }
 
-  useEffect(() => {
-    const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
-    if (accessToken) {
-      dispatch(getUserData(accessToken))
-      setEmailValue(userState.userEmail)
-      setFirstNameValue(userState.userName)
-    }
-  }, [dispatch, userState.userEmail, userState.userName])
-
   const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault()
     const refreshToken = document.cookie.replace(/(?:(?:^|.*;\s*)refreshToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
@@ -42,11 +49,13 @@ function ProfilePage() {
     }
   }
 
-  useEffect(() => {
-    if (userState.logoutSuccess) {
-      history.push('/login')
+  const handleChange = () => {
+    const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    console.log('changing name', firstName)
+    if (accessToken) {
+      dispatch(updateUserInfo({ email: emailValue, password: passwordValue, accessToken: accessToken, name: firstName }))
     }
-  })
+  }
 
   return (
     <div className={`${styles.container}`}>
@@ -60,10 +69,10 @@ function ProfilePage() {
       </div>
       <form action="" className={`${styles.formContainer}`}>
         <div className={`${styles.inputContainer}`}>
-          < Input icon='EditIcon' type='text' onChange={onFirstnameChange} placeholder='Имя' value={firstName} name={'firstname'} />
+          < Input onBlur={() => handleChange()} icon='EditIcon' type='text' onChange={onFirstnameChange} placeholder='Имя' value={firstName} name={'firstname'} />
         </div>
         <div className={`${styles.inputContainer} pt-6`}>
-          < EmailInput onChange={onEmailChange} value={emailValue} name={'E-mail'} />
+          < Input onBlur={() => handleChange()} icon='EditIcon' type='email' onChange={onEmailChange} placeholder='E-mail' value={emailValue} name={'E-mail'} />
         </div>
         <div className={`${styles.inputContainer} pt-6 pb-6 `}>
           < Input icon='EditIcon' placeholder='Пароль' type='password' onChange={onPasswordChange} value={passwordValue} name={'password'} />

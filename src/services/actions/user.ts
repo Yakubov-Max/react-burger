@@ -14,6 +14,13 @@ export const LOGOUT_REQUEST: "LOGOUT_REQUEST" = "LOGOUT_REQUEST";
 export const LOGOUT_FAILED: "LOGOUT_FAILED" = "LOGOUT_FAILED";
 export const LOGOUT_SUCCESS: "LOGOUT_SUCCESS" = "LOGOUT_SUCCESS";
 
+export const PATCH_USER_DATA_REQUEST: "PATCH_USER_DATA_REQUEST" =
+  "PATCH_USER_DATA_REQUEST";
+export const PATCH_USER_DATA_FAILED: "PATCH_USER_DATA_FAILED" =
+  "PATCH_USER_DATA_FAILED";
+export const PATCH_USER_DATA_SUCCESS: "PATCH_USER_DATA_SUCCESS" =
+  "PATCH_USER_DATA_SUCCESS";
+
 export const GET_USER_DATA_REQUEST: "GET_USER_DATA_REQUEST" =
   "GET_USER_DATA_REQUEST";
 export const GET_USER_DATA_FAILED: "GET_USER_DATA_FAILED" =
@@ -41,6 +48,20 @@ export const REFRESH_TOKEN_FALIED: "REFRESH_TOKEN_FALIED" =
   "REFRESH_TOKEN_FALIED";
 export const REFRESH_TOKEN_SUCCESS: "REFRESH_TOKEN_SUCCESS" =
   "REFRESH_TOKEN_SUCCESS";
+
+export interface IPatchUserDataRequest {
+  readonly type: typeof PATCH_USER_DATA_REQUEST;
+}
+
+export interface IPatchUserDataFailed {
+  readonly type: typeof PATCH_USER_DATA_FAILED;
+}
+
+export interface IPatchUserDataSuccess {
+  email: string;
+  name: string;
+  readonly type: typeof PATCH_USER_DATA_SUCCESS;
+}
 
 export interface ILogoutRequest {
   readonly type: typeof LOGOUT_REQUEST;
@@ -153,7 +174,52 @@ export type TUserActions =
   | IGetUserDataSuccess
   | ILogoutRequest
   | ILogoutFailed
-  | ILogoutSuccess;
+  | ILogoutSuccess
+  | IPatchUserDataRequest
+  | IPatchUserDataFailed
+  | IPatchUserDataSuccess;
+
+export const updateUserInfo: AppThunk =
+  ({ name, email, accessToken }) =>
+  (dispatch: AppDispatch) => {
+    dispatch({
+      type: PATCH_USER_DATA_REQUEST,
+    });
+    patchUserInfo(name, email, accessToken).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: PATCH_USER_DATA_SUCCESS,
+          name: res.user.name,
+          email: res.user.email,
+        });
+      } else {
+        dispatch({
+          type: PATCH_USER_DATA_FAILED,
+        });
+      }
+    });
+  };
+
+const patchUserInfo = async (
+  name: string,
+  email: string,
+  accessToken: string
+) => {
+  return await fetch(`${AUTH_URL}/user`, {
+    method: "PATCH",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      user: {
+        name: name,
+        email: email,
+      },
+    }),
+  }).then(_checkResponse);
+};
 
 export const logout: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
   dispatch({
@@ -162,14 +228,14 @@ export const logout: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
   sendLogoutRequest(refreshToken).then((res) => {
     if (res && res.success) {
       dispatch({
-        type: LOGOUT_SUCCESS
-      })
+        type: LOGOUT_SUCCESS,
+      });
     } else {
       dispatch({
-        type: LOGOUT_FAILED
-      })
+        type: LOGOUT_FAILED,
+      });
     }
-  })
+  });
 };
 
 const sendLogoutRequest = async (refreshToken: string) => {
@@ -181,7 +247,7 @@ const sendLogoutRequest = async (refreshToken: string) => {
     },
     body: JSON.stringify({ token: refreshToken }),
   }).then(_checkResponse);
-}
+};
 
 export const getUserData: AppThunk =
   (accessToken) => (dispatch: AppDispatch) => {
