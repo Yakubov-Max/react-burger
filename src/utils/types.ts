@@ -13,3 +13,11 @@ export type TIngredient = {
   __v: number,
   uuid?: number
 }
+
+export type TUser = {
+  email: string,
+  password: string,
+  name: string,
+  accessToken?: string,
+  refreshToken?: string
+}

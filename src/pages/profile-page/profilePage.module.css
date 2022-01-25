@@ -1,0 +1,40 @@
+.linkContainer {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 192px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputContainer {
+  width: 480px;
+}
+
+.inputContainer div {
+  width: 100%;
+  text-align: right;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 320px;
+}
+
+.container {
+  display: flex;
+  padding-top: 120px;
+}
+
+.listItem {
+  text-decoration: none;
+}

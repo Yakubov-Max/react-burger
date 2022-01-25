@@ -1,28 +1,33 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import headerStyles from "./AppHeader.module.css"
+import { Link, NavLink } from 'react-router-dom'
+import { useSelector } from "../utils/hooks";
 
 
 function AppHeader() {
+  const userState = useSelector(state => state.user)
+
   return (
     <header className={headerStyles.headerContainer}>
       <nav className={headerStyles.container}>
         <div className={headerStyles.flex}>
-          <a className={`pt-4 pb-4 pl-5 pr-5 ml-2 ${headerStyles.itemContainer}`} href="#">
+          <NavLink className={`text text_type_main-default text_color_inactive pl-2 ${headerStyles.itemText}`} exact={true} activeClassName="text_color_primary" to="/">
             <BurgerIcon type="primary" />
-            <p className={`text text_type_main-default text_color_primary pl-2 ${headerStyles.itemText}`}>Конструктор</p>
-          </a>
-          <a className={` pt-4 pb-4 pl-5 pr-5 ml-2 ${headerStyles.itemContainer}`} href="#">
+            <p>Конструктор </p>
+          </NavLink>
+          <NavLink className={`text text_type_main-default text_color_inactive pl-2 ${headerStyles.itemText}`} exact={true} activeClassName="text_color_primary" to="/orders">
             <ListIcon type="secondary" />
-            <p className={`text text_type_main-default text_color_inactive pl-2 `}>Лента заказов</p>
-          </a>
+            <p>Лента заказов</p>
+          </NavLink>
         </div>
-        <Logo />
-        <a className={`pt-4 pb-4 pl-5 pr-5 ml-30 ${headerStyles.itemContainer}`} href="#">
+        <Link to={'/'}>
+          <Logo />
+        </Link>
+        <NavLink to={userState.userName ? "/profile" : "/login"} className={`text text_type_main-default text_color_inactive pl-2 ${headerStyles.itemText}`} exact={true} activeClassName="text_color_primary" >
           <ProfileIcon type="secondary" />
-          <p className={`text text_type_main-default text_color_inactive pl-2 ${headerStyles.itemText}`}>Личный кабинет</p>
-        </a>
+          <p >Личный кабинет</p>
+        </NavLink>
       </nav>
     </header>
   )

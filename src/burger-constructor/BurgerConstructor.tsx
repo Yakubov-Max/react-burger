@@ -9,6 +9,7 @@ import update from "immutability-helper";
 import { v4 as uuidv4 } from 'uuid';
 import {TIngredient} from "../utils/types"
 import {useSelector, useDispatch} from '../utils/hooks'
+import { useHistory } from "react-router-dom";
 
 
 interface IBurgerIngredient {
@@ -99,6 +100,8 @@ const BurgerConstructor = () => {
   const constructorList = useSelector(state => state.burger.constructorList)
   const orderNumber = useSelector(state => state.burger.orderNumber)
   const bun = useSelector(state => state.burger.bun)
+  const userState = useSelector(state => state.user)
+  const history = useHistory()
 
   const [totalPrice, setTotalPrice] = useState<number>(0)
 
@@ -116,10 +119,15 @@ const BurgerConstructor = () => {
   }
 
   const handleOpen = () => {
-    dispatch(sendOrder(constructorList.map((element: TIngredient) => element._id)))
-    dispatch({
-      type: CLEAR_CONSTRUCTOR_INGREDIENTS,
-    })
+    if (userState.userName) {
+      dispatch(sendOrder(constructorList.map((element: TIngredient) => element._id)))
+      dispatch({
+        type: CLEAR_CONSTRUCTOR_INGREDIENTS,
+      })
+    } else {
+      history.push('/login')
+    }
+
   }
 
   const [, dropTarget] = useDrop({

@@ -1,9 +1,10 @@
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import ingredientStyles from './ingredient.module.css'
 import { useMemo, FC } from "react"
-import {useSelector} from '../utils/hooks'
+import { useSelector } from '../utils/hooks'
 import { useDrag } from "react-dnd"
 import { TIngredient } from "../utils/types"
+import { Link, useLocation } from "react-router-dom"
 
 interface IIngredient {
   ingredient: TIngredient,
@@ -11,14 +12,13 @@ interface IIngredient {
 }
 
 const Ingredient: FC<IIngredient> = ({ ingredient, handleClick }) => {
-
+  const location = useLocation()
   const constructorList = useSelector(state => state.burger.constructorList);
   const bun = useSelector(state => state.burger.bun)
-  
 
-  const count:number|undefined = useMemo(() => {
+  const count: number | undefined = useMemo(() => {
     if (ingredient.type !== 'bun') {
-      return constructorList.reduce((acc:number, elem: TIngredient) => elem._id === ingredient._id ? acc + 1 : acc, 0)
+      return constructorList.reduce((acc: number, elem: TIngredient) => elem._id === ingredient._id ? acc + 1 : acc, 0)
     } else if (bun && bun._id === ingredient._id) {
       return 1
     }
@@ -31,7 +31,7 @@ const Ingredient: FC<IIngredient> = ({ ingredient, handleClick }) => {
   })
 
   return (
-    <>
+    <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location } }} style={{ textDecoration: 'none' }} className="text_color_primary">
       <div className={ingredientStyles.container} ref={dragRef} onClick={() => handleClick(ingredient)}>
         {count! > 0 &&
           <Counter count={count!} size="default" />
@@ -43,7 +43,7 @@ const Ingredient: FC<IIngredient> = ({ ingredient, handleClick }) => {
         </div>
         <p className="text text_type_main-default text_color_primary">{ingredient.name}</p>
       </div>
-    </>
+    </Link>
   )
 }
 
